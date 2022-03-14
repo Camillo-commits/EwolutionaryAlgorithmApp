@@ -1,5 +1,7 @@
 package com.ewolutionary.alg.views;
 
+import com.ewolutionary.alg.impl.Configuration;
+import com.ewolutionary.alg.impl.Solution;
 import com.ewolutionary.alg.impl.Solver;
 import com.ewolutionary.alg.impl.crossers.CrosserOption;
 import com.ewolutionary.alg.impl.mutators.MutatorOption;
@@ -22,6 +24,7 @@ public class View extends HorizontalLayout {
     private final Checkbox isInverter = new Checkbox("Inverter");
     private final Button solveButton = new Button("Solve");
     private Solver solver;
+    private Solution solution;
 
     public View() {
         VerticalLayout layout = new VerticalLayout();
@@ -33,7 +36,12 @@ public class View extends HorizontalLayout {
         buttons.setPadding(true);
 
         solveButton.addClickListener(event -> {
-           solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(), isInverter.getValue());
+            //TODO - add population size option on page
+            solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(), Configuration.
+                    builder()
+                    .isInverter(isInverter.getValue())
+                    .build());
+            solution = solver.solve();
         });
 
         layout.add(comboBoxesLayout, buttons);

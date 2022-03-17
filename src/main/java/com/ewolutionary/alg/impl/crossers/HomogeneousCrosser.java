@@ -4,9 +4,10 @@ import com.ewolutionary.alg.impl.Entity;
 
 import java.util.List;
 
-public class HomogeneousCrosser implements Crosser {
-    @Override
-    public void cross(List<Entity> individuals) {
+public class HomogeneousCrosser extends Crosser {
 
+    @Override
+    protected List<Entity> cross(Entity first, Entity second) {
+        return null;
     }
 }

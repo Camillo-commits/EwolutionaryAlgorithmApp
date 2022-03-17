@@ -14,4 +14,5 @@ public class Configuration {
     private long maxIterations;
     private boolean isEliteStrategy;
     private boolean isInverter;
+    private double crossingProbability;
 }

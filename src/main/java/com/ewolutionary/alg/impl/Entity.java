@@ -1,13 +1,8 @@
 package com.ewolutionary.alg.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Arrays;
 
 public class Entity {
-
-    @Autowired
-    Configuration configuration;
 
     private int size;
     private Chromosome chromosome;
@@ -21,6 +16,15 @@ public class Entity {
         this.stop = stop;
         this.size = calculateSize(precision);
         this.chromosome = new Chromosome(size);
+        this.entityValue = calculateValue();
+        this.fitness = calculateFitness();
+    }
+
+    public Entity(int start, int stop, byte[] chromosomeData) {
+        this.start = start;
+        this.stop = stop;
+        this.size = chromosomeData.length;
+        this.chromosome = new Chromosome(chromosomeData);
         this.entityValue = calculateValue();
         this.fitness = calculateFitness();
     }
@@ -60,6 +64,14 @@ public class Entity {
 
     private double log2(double n) {
         return Math.log(n) / Math.log(2);
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getStop() {
+        return stop;
     }
 
     @Override

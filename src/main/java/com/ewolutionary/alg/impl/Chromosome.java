@@ -11,6 +11,10 @@ public class Chromosome {
         fillBinary();
     }
 
+    public Chromosome(byte[] binary) {
+        this.binary = binary;
+    }
+
     public byte[] getBinary() {
         return binary;
     }

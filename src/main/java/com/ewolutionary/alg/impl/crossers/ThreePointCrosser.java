@@ -5,6 +5,7 @@ import com.ewolutionary.alg.impl.Entity;
 import java.util.Arrays;
 import java.util.List;
 import java.util.PrimitiveIterator;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 public class ThreePointCrosser extends Crosser {
@@ -63,5 +64,12 @@ public class ThreePointCrosser extends Crosser {
         position2 = positions.nextInt();
         position3 = positions.nextInt();
         return Arrays.asList(position1, position2, position3);
+    }
+
+    public ThreePointCrosser() {
+    }
+
+    public ThreePointCrosser(Random random) {
+        this.rnd = random;
     }
 }

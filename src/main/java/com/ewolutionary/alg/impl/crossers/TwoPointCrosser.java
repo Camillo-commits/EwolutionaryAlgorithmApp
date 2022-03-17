@@ -4,6 +4,7 @@ import com.ewolutionary.alg.impl.Entity;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class TwoPointCrosser extends Crosser {
 
@@ -37,10 +38,18 @@ public class TwoPointCrosser extends Crosser {
             secondNew[j] = firstBinary[j];
         }
         for (int j = bytePosition2; j < chromosomeLength; ++j) {
-            firstNew[j] = secondBinary[j];
-            secondNew[j] = firstBinary[j];
+            firstNew[j] = firstBinary[j];
+            secondNew[j] = secondBinary[j];
         }
         return Arrays.asList(new Entity(first.getStart(), first.getStop(), firstNew),
                 new Entity(second.getStart(), second.getStop(), secondNew));
+    }
+
+
+    public TwoPointCrosser() {
+    }
+
+    public TwoPointCrosser(Random random) {
+        this.rnd = random;
     }
 }

@@ -33,31 +33,26 @@ public class Solver {
         }
     }
 
-    public Solution solve() {
-        List<Solution> population = generatePopulation();
+    public Entity solve() {
+        Population population = new Population(configuration.getSizeOfPopulation(), configuration.getPrecision(), configuration.getStart(), configuration.getStop());
         boolean precisionMet = false;
         long numberOfIterations = 0;
-        Solution bestPreviousSolution = null;
+        Entity bestPreviousSolution = null;
         while (!precisionMet) {
             ++numberOfIterations;
-            population.forEach(Solution::calculateValue);
-            List<Solution> selected = selector.select(population, configuration.isEliteStrategy());
+            List<Entity> selected = selector.select(population, configuration.isEliteStrategy());
             crosser.cross(selected);
             mutator.mutate(selected);
             inverter.ifPresent(inv -> inv.invert(selected));
-            Solution bestCurrentSolution = selector.findBestSolution(selected);
+            Entity bestCurrentSolution = selector.findBestSolution(selected);
             precisionMet = isStopArgumentsMet(numberOfIterations, configuration.getMaxIterations(), bestCurrentSolution, bestPreviousSolution);
             bestPreviousSolution = bestCurrentSolution;
         }
         return bestPreviousSolution;
     }
 
-    private List<Solution> generatePopulation() {
-        //TODO generate population ( use sizeOfPopulation )
-        return Collections.emptyList();
-    }
-
-    private boolean isStopArgumentsMet(long numberOfIterations, long maxIterations, Solution bestSolution, Solution bestPreviousSolution) {
+    private boolean isStopArgumentsMet(long numberOfIterations, long maxIterations, Entity bestSolution, Entity bestPreviousSolution) {
+        if(numberOfIterations >= configuration.getMaxIterations()) return false;
         //TODO calculate real precision
         return true;
     }

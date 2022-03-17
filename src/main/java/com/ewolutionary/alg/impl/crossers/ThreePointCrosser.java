@@ -1,12 +1,12 @@
 package com.ewolutionary.alg.impl.crossers;
 
-import com.ewolutionary.alg.impl.Solution;
+import com.ewolutionary.alg.impl.Entity;
 
 import java.util.List;
 
 public class ThreePointCrosser implements Crosser {
     @Override
-    public void cross(List<Solution> individuals) {
+    public void cross(List<Entity> individuals) {
 
     }
 }

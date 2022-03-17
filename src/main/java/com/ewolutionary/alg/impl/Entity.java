@@ -1,36 +1,47 @@
 package com.ewolutionary.alg.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Arrays;
 
 public class Entity {
+
+    @Autowired
+    Configuration configuration;
 
     private int size;
     private Chromosome chromosome;
     private double entityValue;
     private final int start;
     private final int stop;
+    private double fitness;
 
     public Entity(int start, int stop, int precision) {
         this.start = start;
         this.stop = stop;
         this.size = calculateSize(precision);
         this.chromosome = new Chromosome(size);
-        this.entityValue = calculateEntityValue();
+        this.entityValue = calculateValue();
+        this.fitness = calculateFitness();
     }
 
     public int getSize() {
         return size;
     }
 
-    public double getEntityValue() {
+    public double getValue() {
         return entityValue;
+    }
+
+    public double getFitness() {
+        return fitness;
     }
 
     public byte[] getChromosome() {
         return chromosome.getBinary();
     }
 
-    private double calculateEntityValue() {
+    private double calculateValue() {
         // x = a + decimal(chromosome) * (b-a) / (2^m - 1)
         return start + chromosome.getDecimalValue() * (stop - start) / (Math.pow(2, size) - 1);
     }
@@ -42,13 +53,18 @@ public class Entity {
         return (int) Math.ceil(left);
     }
 
+    private double calculateFitness() {
+        //TODO think how to represent function and how calculate fitness from it
+        return 0;
+    }
+
     private double log2(double n) {
         return Math.log(n) / Math.log(2);
     }
 
     @Override
     public String toString() {
-        return "Entity: " + Arrays.toString(chromosome.getBinary()) + " value: " + getEntityValue();
+        return "Entity: " + Arrays.toString(chromosome.getBinary()) + " value: " + getValue();
     }
 
 }

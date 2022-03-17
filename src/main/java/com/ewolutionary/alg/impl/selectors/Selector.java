@@ -1,11 +1,12 @@
 package com.ewolutionary.alg.impl.selectors;
 
-import com.ewolutionary.alg.impl.Solution;
+import com.ewolutionary.alg.impl.Entity;
+import com.ewolutionary.alg.impl.Population;
 
 import java.util.List;
 
 public interface Selector {
-    public List<Solution> select(List<Solution> individuals, boolean isEliteStrategy);
+    public List<Entity> select(Population population, boolean isEliteStrategy);
 
-    public Solution findBestSolution(List<Solution> individuals);
+    public Entity findBestSolution(List<Entity> population);
 }

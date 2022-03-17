@@ -7,6 +7,10 @@ import lombok.Getter;
 @Getter
 public class Configuration {
     private int sizeOfPopulation;
+    private int precision;
+    private int start;
+    private int stop;
+    private int percentOfBestToNextCentury;
     private long maxIterations;
     private boolean isEliteStrategy;
     private boolean isInverter;

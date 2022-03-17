@@ -1,7 +1,7 @@
 package com.ewolutionary.alg.views;
 
 import com.ewolutionary.alg.impl.Configuration;
-import com.ewolutionary.alg.impl.Solution;
+import com.ewolutionary.alg.impl.Entity;
 import com.ewolutionary.alg.impl.Solver;
 import com.ewolutionary.alg.impl.crossers.CrosserOption;
 import com.ewolutionary.alg.impl.mutators.MutatorOption;
@@ -24,7 +24,7 @@ public class View extends HorizontalLayout {
     private final Checkbox isInverter = new Checkbox("Inverter");
     private final Button solveButton = new Button("Solve");
     private Solver solver;
-    private Solution solution;
+    private Entity solution;
 
     public View() {
         VerticalLayout layout = new VerticalLayout();

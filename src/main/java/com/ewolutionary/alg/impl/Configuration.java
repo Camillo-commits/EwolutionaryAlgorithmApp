@@ -15,4 +15,5 @@ public class Configuration {
     private boolean isEliteStrategy;
     private boolean isInverter;
     private double crossingProbability;
+    private double mutationProbability;
 }

@@ -5,5 +5,5 @@ import com.ewolutionary.alg.impl.Entity;
 import java.util.List;
 
 public interface Mutator {
-    public void mutate(List<Entity> individuals);
+    public void mutate(List<Entity> individualsm, double mutationPropability);
 }

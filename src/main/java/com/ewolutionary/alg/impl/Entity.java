@@ -45,6 +45,10 @@ public class Entity {
         return chromosome.getBinary();
     }
 
+    public Chromosome getChromosome2() {
+        return chromosome;
+    }
+
     private double calculateValue() {
         // x = a + decimal(chromosome) * (b-a) / (2^m - 1)
         return start + chromosome.getDecimalValue() * (stop - start) / (Math.pow(2, size) - 1);

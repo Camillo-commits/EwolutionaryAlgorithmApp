@@ -34,7 +34,7 @@ public class Solver {
     }
 
     public Entity solve() {
-        Population population = new Population(configuration.getSizeOfPopulation(), configuration.getPrecision(), configuration.getStart(), configuration.getStop());
+        Population population = new Population(configuration.getSizeOfPopulation(), configuration.getPrecision(), configuration.getStart(), configuration.getStop(), configuration.getXVariableCount());
         boolean precisionMet = false;
         long numberOfIterations = 0;
         Entity bestPreviousSolution = null;

@@ -17,5 +17,5 @@ public class Configuration {
     private double crossingProbability;
     private double mutationProbability;
     private double invertionProbability;
-
+    private int xVariableCount;
 }

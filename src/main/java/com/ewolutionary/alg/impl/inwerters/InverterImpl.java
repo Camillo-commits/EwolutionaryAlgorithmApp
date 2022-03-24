@@ -19,8 +19,8 @@ public class InverterImpl implements Inverter {
 
         for(Entity entity: individuals) {
             if (Math.random() > invertionProbability) continue;
-            int chromosomeLength = entity.getChromosome().length;
-            byte[] binary = entity.getChromosome();
+            int chromosomeLength = entity.getSize();
+            byte[] binary = entity.getChromosomesBytes().get(0); //TODO
             int firstInvertionPoint;
             int secondInvertionPoint;
 
@@ -50,7 +50,7 @@ public class InverterImpl implements Inverter {
                binary[i] = selectedBinary[j];
                j++;
             }
-            entity.getChromosome2().setBinary(binary);
+            entity.getChromosomes().get(1).setBinary(binary);
         }
 
     }

@@ -1,13 +1,15 @@
 package com.ewolutionary.alg.impl.parser;
 
+import com.ewolutionary.alg.impl.Entity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ExpressionSolverTest {
+@RunWith(MockitoJUnitRunner.class) // add 'public' if you want to run these tests
+class ExpressionSolverTest {
 
     @Test
     public void shouldParsePowerExpression() {
@@ -31,6 +33,12 @@ public class ExpressionSolverTest {
         assertEquals(83.0, ExpressionSolver.solve("sqrt(4) + pow(3,4)", null));
         assertEquals(4.0, ExpressionSolver.solve("sqrt(pow(2,4))", null));
         assertEquals(4.0, ExpressionSolver.solve("pow(2,sqrt(4))", null));
+    }
+
+    @Test
+    public void shouldParseExpressionWithX() {
+        Entity entity = mock(Entity.class);
+
     }
 
 }

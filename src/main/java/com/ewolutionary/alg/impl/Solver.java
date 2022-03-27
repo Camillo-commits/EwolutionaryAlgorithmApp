@@ -41,7 +41,7 @@ public class Solver {
         while (!precisionMet) {
             ++numberOfIterations;
             List<Entity> selected = selector.select(population, configuration.isEliteStrategy());
-            crosser.cross(selected, configuration.getCrossingProbability());
+            crosser.cross(selected, configuration.getCrossingProbability(), configuration.getSizeOfPopulation());
             mutator.mutate(selected, configuration.getMutationProbability());
             inverter.ifPresent(inv -> inv.invert(selected, configuration.getInvertionProbability()));
             Entity bestCurrentSolution = selector.findBestSolution(selected);

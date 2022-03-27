@@ -17,11 +17,10 @@ public abstract class Crosser {
 
     protected abstract List<Entity> cross(Entity first, Entity second);
 
-    public final void cross(List<Entity> individuals, double probability) {
-        int originalSize = individuals.size();
+    public final void cross(List<Entity> individuals, double probability, int sizeOfPopulation) {
         List<Entity> result = new ArrayList<>();
         List<Entity> unmodifiedResult = new ArrayList<>();
-        double iterations = (double) individuals.size() / 2;
+        double iterations = (double) sizeOfPopulation / 2;
 
         for (int i = 0; i < Math.ceil(iterations); ++i) {
             int firstIndex = rnd.nextInt(individuals.size());
@@ -39,7 +38,7 @@ public abstract class Crosser {
         }
 
         individuals.clear();
-        while (originalSize != calcFullSize(result, unmodifiedResult)) {
+        while (sizeOfPopulation != calcFullSize(result, unmodifiedResult)) {
             result.remove(result.size() - 1);
         }
         individuals.addAll(result);

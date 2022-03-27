@@ -35,7 +35,7 @@ public class HomogeneousCrosserTest {
         //when
         List<Entity> solutionList = new ArrayList<>(Arrays.asList(new Entity(0, 0, List.of(chrom1)),
                 new Entity(0, 0, List.of(chrom2))));
-        crosser.cross(solutionList, 1.0);
+        crosser.cross(solutionList, 1.0, 2);
 
         //then
         Entity solution1 = solutionList.get(0);

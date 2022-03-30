@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface Selector {
     public List<Entity> select(Population population, boolean isEliteStrategy, SelectorConfiguration configuration);
-
-    public Entity findBestSolution(List<Entity> population);
 }

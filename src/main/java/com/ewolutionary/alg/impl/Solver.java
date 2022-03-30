@@ -11,6 +11,7 @@ import com.ewolutionary.alg.impl.mutators.MutatorProvider;
 import com.ewolutionary.alg.impl.selectors.Selector;
 import com.ewolutionary.alg.impl.selectors.SelectorOption;
 import com.ewolutionary.alg.impl.selectors.SelectorProvider;
+import com.ewolutionary.alg.impl.utils.EntityUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,11 +41,11 @@ public class Solver {
         Entity bestPreviousSolution = null;
         while (!precisionMet) {
             ++numberOfIterations;
-            List<Entity> selected = selector.select(population, configuration.isEliteStrategy());
+            List<Entity> selected = selector.select(population, configuration.isEliteStrategy(), configuration.getSelectorConfiguration());
             crosser.cross(selected, configuration.getCrossingProbability(), configuration.getSizeOfPopulation());
             mutator.mutate(selected, configuration.getMutationProbability());
             inverter.ifPresent(inv -> inv.invert(selected, configuration.getInvertionProbability()));
-            Entity bestCurrentSolution = selector.findBestSolution(selected);
+            Entity bestCurrentSolution = EntityUtils.findMaxBestSolution(selected);
             precisionMet = isStopArgumentsMet(numberOfIterations, configuration.getMaxIterations(), bestCurrentSolution, bestPreviousSolution);
             bestPreviousSolution = bestCurrentSolution;
         }

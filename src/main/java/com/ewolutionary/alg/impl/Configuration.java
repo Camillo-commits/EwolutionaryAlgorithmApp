@@ -1,5 +1,6 @@
 package com.ewolutionary.alg.impl;
 
+import com.ewolutionary.alg.impl.selectors.configuration.SelectorConfiguration;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,4 +19,5 @@ public class Configuration {
     private double mutationProbability;
     private double invertionProbability;
     private int xVariableCount;
+    private SelectorConfiguration selectorConfiguration;
 }

@@ -1,6 +1,8 @@
 package com.ewolutionary.alg.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -56,6 +58,16 @@ public class Entity {
         return chromosomes.stream().map(c -> c.getBinary()).collect(Collectors.toList());
     }
 
+    public void setChromosomesBytes(List<byte[]> binaries) {
+        if(binaries.size() == chromosomes.size()) {
+            for(int i=0; i< binaries.size(); i++) {
+                chromosomes.get(i).setBinary(binaries.get(i));
+            }
+        }
+        this.entityValue = calculateValue();
+        this.fitness = calculateFitness();
+    }
+
     private List<Double> calculateValue() {
         // x = a + decimal(chromosome) * (b-a) / (2^m - 1)
 //        return start + chromosome.getDecimalValue() * (stop - start) / (Math.pow(2, size) - 1);
@@ -71,7 +83,8 @@ public class Entity {
 
     private double calculateFitness() {
         //TODO think how to represent function and how calculate fitness from it
-        return 0;
+        double x = entityValue.get(0);
+        return 2 * x * x * 5; // for test
     }
 
     private double log2(double n) {
@@ -96,7 +109,7 @@ public class Entity {
 
     @Override
     public String toString() {
-        return "Entity: " + chromosomes + " value: " + getValue();
+        return "Entity " + chromosomes.toString() + "value: " + getValue();
     }
 
 }

@@ -7,12 +7,12 @@ import java.util.List;
 public class Population {
 
     private final int size;
-    private final int xCount;
+    private final int xVariablesCount;
     private List<Entity> entities = new ArrayList<>();
 
-    public Population(int size, int precision, int start, int stop, int xCount) {
+    public Population(int size, int precision, int start, int stop, int xVariablesCount) {
         this.size = size;
-        this.xCount = xCount;
+        this.xVariablesCount = xVariablesCount;
         generateEntities(start, stop, precision);
     }
 
@@ -20,10 +20,20 @@ public class Population {
         return entities;
     }
 
+    public void setEntities(List<Entity> entities) {
+        if(entities.size() == size)
+            this.entities = entities;
+    }
+
     private void generateEntities(int start, int stop, int precision) {
         for(int i=0; i<size; i++) {
-            entities.add(new Entity(start, stop, precision, xCount));
+            entities.add(new Entity(start, stop, precision, xVariablesCount));
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Population: \n" + entities.toString();
     }
 
 }

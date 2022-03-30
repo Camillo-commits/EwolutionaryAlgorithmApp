@@ -19,7 +19,7 @@ public class RouletteSelector implements Selector {
             throw new IllegalArgumentException("WrongConfiguration");
         }
         int amount2Select = (int) (population.getEntities().size() * (double) configuration.getConfigurations().get(BEST_PERCENTAGE));
-        int elite2Select = (int) (population.getEntities().size() * (double) percentOfBestToNextCentury);
+        int elite2Select = (int) (population.getEntities().size() * (double) percentOfBestToNextCentury/100);
         List<Entity> selectedEntities = new ArrayList<>();
         List<Entity> entities = population
                 .getEntities()
@@ -33,18 +33,22 @@ public class RouletteSelector implements Selector {
         }
 
         double fitnessCount = entities.stream().mapToDouble(Entity::getFitness).sum();
+
         Map<Entity, Double> mapEntitiesProbability = new LinkedHashMap<>();
 
-        AtomicReference<Double> entitiesFitness = new AtomicReference<>((double) 0);
-        entities.forEach(e -> mapEntitiesProbability.put(e, entitiesFitness.updateAndGet(v -> v + e.getFitness() / fitnessCount)));
+        double entitiesFitness = 0;
+        double entityFitness = 0;
+        for(Entity e: entities) {
+            entityFitness = e.getFitness() / fitnessCount;
+            entitiesFitness += entityFitness;
+            mapEntitiesProbability.put(e, entitiesFitness);
+        }
 
         while(amount2Select > 0) {
             double r = Math.random();
-            Optional<Entity> selected = mapEntitiesProbability.entrySet().stream().filter(d -> (double) d.getValue() <= r).map(Map.Entry::getKey).findFirst();
-            if(selected.isPresent()) {
-                selectedEntities.add(selected.get());
-                amount2Select--;
-            }
+            List<Entity> selected = mapEntitiesProbability.entrySet().stream().filter(e -> (double) e.getValue() >= r).map(Map.Entry::getKey).collect(Collectors.toList());
+            selectedEntities.add(selected.get(0));
+            amount2Select--;
         }
 
         return selectedEntities;

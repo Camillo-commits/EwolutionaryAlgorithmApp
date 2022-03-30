@@ -1,6 +1,10 @@
 package com.ewolutionary.alg.impl;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class Chromosome {
 
@@ -37,6 +41,11 @@ public class Chromosome {
         for(int i=0; i<binary.length; i++) {
             binary[i] = Math.random() >= 0.5 ? (byte)1 : (byte)0 ;
         }
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(binary);
     }
 
 }

@@ -14,7 +14,7 @@ import static com.ewolutionary.alg.impl.selectors.configuration.SelectorKeys.BES
 public class BestSelector implements Selector {
 
     @Override
-    public List<Entity> select(Population population, boolean isEliteStrategy, SelectorConfiguration configuration) {
+    public List<Entity> select(Population population, boolean isEliteStrategy, int percentOfBestToNextCentury, SelectorConfiguration configuration) {
         if (!(configuration instanceof BestSelectorConfiguration)) {
             throw new IllegalArgumentException("WrongConfiguration");
         }

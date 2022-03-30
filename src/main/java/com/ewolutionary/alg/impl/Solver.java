@@ -13,7 +13,6 @@ import com.ewolutionary.alg.impl.selectors.SelectorOption;
 import com.ewolutionary.alg.impl.selectors.SelectorProvider;
 import com.ewolutionary.alg.impl.utils.EntityUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,25 +34,28 @@ public class Solver {
     }
 
     public Entity solve() {
-        Population population = new Population(configuration.getSizeOfPopulation(), configuration.getPrecision(), configuration.getStart(), configuration.getStop(), configuration.getXVariableCount());
+        Population population = new Population(configuration.getSizeOfPopulation(), configuration.getPrecision(),
+                configuration.getStart(), configuration.getStop(), configuration.getXVariableCount());
         boolean precisionMet = false;
         long numberOfIterations = 0;
         Entity bestPreviousSolution = null;
         while (!precisionMet) {
             ++numberOfIterations;
-            List<Entity> selected = selector.select(population, configuration.isEliteStrategy(), configuration.getSelectorConfiguration());
+            List<Entity> selected = selector.select(population, configuration.isEliteStrategy(),
+                    configuration.getPercentOfBestToNextCentury(), configuration.getSelectorConfiguration());
             crosser.cross(selected, configuration.getCrossingProbability(), configuration.getSizeOfPopulation());
             mutator.mutate(selected, configuration.getMutationProbability());
             inverter.ifPresent(inv -> inv.invert(selected, configuration.getInvertionProbability()));
             Entity bestCurrentSolution = EntityUtils.findMaxBestSolution(selected);
-            precisionMet = isStopArgumentsMet(numberOfIterations, configuration.getMaxIterations(), bestCurrentSolution, bestPreviousSolution);
+            precisionMet = isStopArgumentsMet(numberOfIterations, configuration.getMaxIterations(),
+                    bestCurrentSolution, bestPreviousSolution);
             bestPreviousSolution = bestCurrentSolution;
         }
         return bestPreviousSolution;
     }
 
     private boolean isStopArgumentsMet(long numberOfIterations, long maxIterations, Entity bestSolution, Entity bestPreviousSolution) {
-        if(numberOfIterations >= configuration.getMaxIterations()) return false;
+        if (numberOfIterations >= configuration.getMaxIterations()) return false;
         //TODO calculate real precision
         return true;
     }

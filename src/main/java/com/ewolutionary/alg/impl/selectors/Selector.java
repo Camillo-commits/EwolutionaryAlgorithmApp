@@ -7,5 +7,5 @@ import com.ewolutionary.alg.impl.selectors.configuration.SelectorConfiguration;
 import java.util.List;
 
 public interface Selector {
-    public List<Entity> select(Population population, boolean isEliteStrategy, SelectorConfiguration configuration);
+    public List<Entity> select(Population population, boolean isEliteStrategy, int percentOfBestToNextCentury,  SelectorConfiguration configuration);
 }

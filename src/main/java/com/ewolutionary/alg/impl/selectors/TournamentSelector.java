@@ -9,7 +9,7 @@ import java.util.List;
 public class TournamentSelector implements Selector {
 
     @Override
-    public List<Entity> select(Population population, boolean isEliteStrategy, SelectorConfiguration configuration) {
+    public List<Entity> select(Population population, boolean isEliteStrategy, int percentOfBestToNextCentury, SelectorConfiguration configuration) {
         return null;
     }
 }

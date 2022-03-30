@@ -5,6 +5,7 @@ import com.ewolutionary.alg.impl.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public abstract class Crosser {
     public static int minProbability = 0;
@@ -19,7 +20,8 @@ public abstract class Crosser {
 
     public final void cross(List<Entity> individuals, double probability, int sizeOfPopulation) {
         List<Entity> result = new ArrayList<>();
-        List<Entity> unmodifiedResult = new ArrayList<>();
+        List<Entity> unmodifiedResult = individuals.stream().filter(Entity::isElite).collect(Collectors.toList());
+
         double iterations = (double) sizeOfPopulation / 2;
 
         for (int i = 0; i < Math.ceil(iterations); ++i) {

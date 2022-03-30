@@ -1,7 +1,5 @@
 package com.ewolutionary.alg.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -13,6 +11,7 @@ public class Entity {
     private List<Double> entityValue;
     private final int start;
     private final int stop;
+    private boolean isElite;
     private double fitness;
 
     public Entity(int start, int stop, int precision, int xVariablesCount) {
@@ -85,6 +84,14 @@ public class Entity {
 
     public int getStop() {
         return stop;
+    }
+
+    public boolean isElite() {
+        return isElite;
+    }
+
+    public void setElite(boolean elite) {
+        isElite = elite;
     }
 
     @Override

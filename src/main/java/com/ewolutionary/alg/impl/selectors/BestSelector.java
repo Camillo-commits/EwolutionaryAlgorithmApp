@@ -26,7 +26,7 @@ public class BestSelector implements Selector {
             amount2Select -= population.getEntities().size() * percentOfBestToNextCentury / 100;
             List<Entity> sorted = population.getEntities()
                     .stream()
-                    .sorted(Comparator.comparingDouble(Entity::getFitness))
+                    .sorted(Comparator.comparingDouble(Entity::getFitness).reversed())
                     .collect(Collectors.toList());
             result.addAll(sorted.subList(0, percentOfBestToNextCentury / 100));
             population.getEntities().removeAll(result);
@@ -34,7 +34,7 @@ public class BestSelector implements Selector {
 
         List<Entity> entities = population.getEntities()
                 .stream()
-                .sorted(Comparator.comparingDouble(Entity::getFitness))
+                .sorted(Comparator.comparingDouble(Entity::getFitness).reversed())
                 .collect(Collectors.toList());
         if (amount2Select > 0) {
             result.addAll(entities.subList(0, amount2Select));

@@ -58,6 +58,10 @@ public class Entity {
         return chromosomes.stream().map(c -> c.getBinary()).collect(Collectors.toList());
     }
 
+    private void setFitness(Double fitness) {
+        this.fitness = fitness;
+    }
+
     public void setChromosomesBytes(List<byte[]> binaries) {
         if(binaries.size() == chromosomes.size()) {
             for(int i=0; i< binaries.size(); i++) {

@@ -1,5 +1,7 @@
 package com.ewolutionary.alg.impl;
 
+import com.ewolutionary.alg.function.Functions;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +16,7 @@ public class Entity {
     private final int start;
     private final int stop;
     private boolean isElite;
-    private double fitness;
+    private Double fitness;
 
     public Entity(int start, int stop, int precision, int xVariablesCount) {
         this.start = start;
@@ -22,7 +24,6 @@ public class Entity {
         this.size = calculateSize(precision);
         this.chromosomes = generateChromosomes(size, xVariablesCount);
         this.entityValue = calculateValue();
-        this.fitness = calculateFitness();
     }
 
     public Entity(int start, int stop, List<byte[]> chromosomeData) {
@@ -31,7 +32,6 @@ public class Entity {
         this.size = chromosomeData.get(0).length;
         this.chromosomes = chromosomeData.stream().map(Chromosome::new).collect(Collectors.toList());
         this.entityValue = calculateValue();
-        this.fitness = calculateFitness();
     }
 
     private List<Chromosome> generateChromosomes(int size, int count) {
@@ -44,10 +44,6 @@ public class Entity {
 
     public List<Double> getValue() {
         return entityValue;
-    }
-
-    public double getFitness() {
-        return fitness;
     }
 
     public List<Chromosome> getChromosomes() {
@@ -65,12 +61,17 @@ public class Entity {
             }
         }
         this.entityValue = calculateValue();
-        this.fitness = calculateFitness();
+    }
+
+    public double getFitness() {
+        if(null == fitness) {
+            fitness = calculateFitness();
+        }
+        return fitness;
     }
 
     private List<Double> calculateValue() {
         // x = a + decimal(chromosome) * (b-a) / (2^m - 1)
-//        return start + chromosome.getDecimalValue() * (stop - start) / (Math.pow(2, size) - 1);
         return chromosomes.stream().map(c -> start + c.getDecimalValue() * (stop - start) / (Math.pow(2, size) - 1)).collect(Collectors.toList());
     }
 
@@ -81,10 +82,8 @@ public class Entity {
         return (int) Math.ceil(left);
     }
 
-    private double calculateFitness() {
-        //TODO think how to represent function and how calculate fitness from it
-        double x = entityValue.get(0);
-        return 2 * x * x * 5; // for test
+    public double calculateFitness() {
+        return Functions.function(Solver.functionToSolve(), entityValue);
     }
 
     private double log2(double n) {

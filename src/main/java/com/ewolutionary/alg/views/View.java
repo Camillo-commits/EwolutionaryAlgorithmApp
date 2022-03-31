@@ -11,6 +11,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -22,6 +23,7 @@ public class View extends HorizontalLayout {
     private final ComboBox<MutatorOption> mutators = new ComboBox<>("Mutator", MutatorOption.values());
     private final ComboBox<SelectorOption> selectors = new ComboBox<>("Selector", SelectorOption.values());
     private final Checkbox isInverter = new Checkbox("Inverter");
+    private final TextField function = new TextField("x1^2+x2");
     private final Button solveButton = new Button("Solve");
     private Solver solver;
     private Entity solution;
@@ -37,7 +39,7 @@ public class View extends HorizontalLayout {
 
         solveButton.addClickListener(event -> {
             //TODO - add population size option on page
-            solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(), Configuration.
+            solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(), function.getValue(), Configuration.
                     builder()
                     .isInverter(isInverter.getValue())
                     .build());

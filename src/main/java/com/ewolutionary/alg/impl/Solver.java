@@ -22,12 +22,14 @@ public class Solver {
     private Optional<Inverter> inverter;
     private Crosser crosser;
     private Configuration configuration;
+    private static String function;
 
-    public Solver(MutatorOption mutatorOption, CrosserOption crosserOption, SelectorOption selectorOption, Configuration configuration) {
+    public Solver(MutatorOption mutatorOption, CrosserOption crosserOption, SelectorOption selectorOption, String function, Configuration configuration) {
         this.mutator = MutatorProvider.getMutator(mutatorOption);
         this.crosser = CrosserProvider.getCrosser(crosserOption);
         this.selector = SelectorProvider.getSelector(selectorOption);
         this.configuration = configuration;
+        Solver.function = function;
         if (true) {
             this.inverter = Optional.of(new InverterImpl());
         }
@@ -58,6 +60,15 @@ public class Solver {
         if (numberOfIterations >= configuration.getMaxIterations()) return false;
         //TODO calculate real precision
         return true;
+    }
+
+    public static String functionToSolve() {
+        return function;
+    }
+
+    // only for tests
+    public static void overrideFunctionToSolve(String function) {
+        Solver.function = function;
     }
 
 }

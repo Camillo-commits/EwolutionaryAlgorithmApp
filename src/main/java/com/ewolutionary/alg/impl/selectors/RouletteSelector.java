@@ -1,5 +1,6 @@
 package com.ewolutionary.alg.impl.selectors;
 
+import com.ewolutionary.alg.function.Functions;
 import com.ewolutionary.alg.impl.Entity;
 import com.ewolutionary.alg.impl.Population;
 import com.ewolutionary.alg.impl.selectors.configuration.RouletteSelectorConfiguration;
@@ -24,7 +25,7 @@ public class RouletteSelector implements Selector {
         List<Entity> entities = population
                 .getEntities()
                 .stream()
-                .sorted(Comparator.comparingDouble(Entity::getFitness))
+                .sorted(Comparator.comparingDouble(Entity::calculateFitness))
                 .collect(Collectors.toList());
         if(isEliteStrategy) {
             selectedEntities.addAll(entities.subList(0, elite2Select));

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import static com.ewolutionary.alg.impl.selectors.configuration.SelectorKeys.BEST_PERCENTAGE;
 
 public class RouletteSelector implements Selector {
-
+    //TODO add function minimization method path
     @Override
     public List<Entity> select(Population population, boolean isEliteStrategy, int percentOfBestToNextCentury, SelectorConfiguration configuration) {
         if (!(configuration instanceof RouletteSelectorConfiguration)) {

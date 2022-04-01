@@ -6,6 +6,8 @@ import com.ewolutionary.alg.impl.Solver;
 import com.ewolutionary.alg.impl.crossers.CrosserOption;
 import com.ewolutionary.alg.impl.mutators.MutatorOption;
 import com.ewolutionary.alg.impl.selectors.SelectorOption;
+import com.ewolutionary.alg.impl.selectors.configuration.RouletteSelectorConfiguration;
+import com.ewolutionary.alg.impl.selectors.configuration.SelectorConfiguration;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -48,6 +50,12 @@ public class View extends HorizontalLayout {
 
         layout.add(comboBoxesLayout, buttons);
         add(layout);
+    }
+
+    public static void main(String[] args) {
+        Configuration conf = new Configuration(10, 2, -10, 10, 20, 10, true, false, 0.25, 0.20, 0.25, 1, new RouletteSelectorConfiguration(0.20));
+        Solver solver = new Solver(MutatorOption.ONE_POINT, CrosserOption.HOMOGENEOUS, SelectorOption.ROULETTE, "2x^2+5", conf);
+        Entity e = solver.solve();
     }
 
 }

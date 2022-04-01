@@ -30,7 +30,7 @@ public class Solver {
         this.selector = SelectorProvider.getSelector(selectorOption);
         this.configuration = configuration;
         Solver.function = function;
-        if (true) {
+        if (configuration.isInverter()) {
             this.inverter = Optional.of(new InverterImpl());
         }
     }
@@ -47,19 +47,20 @@ public class Solver {
                     configuration.getPercentOfBestToNextCentury(), configuration.getSelectorConfiguration());
             crosser.cross(selected, configuration.getCrossingProbability(), configuration.getSizeOfPopulation());
             mutator.mutate(selected, configuration.getMutationProbability());
-            inverter.ifPresent(inv -> inv.invert(selected, configuration.getInvertionProbability()));
+            if(inverter != null) inverter.ifPresent(inv -> inv.invert(selected, configuration.getInvertionProbability()));
             Entity bestCurrentSolution = EntityUtils.findMaxBestSolution(selected);
             precisionMet = isStopArgumentsMet(numberOfIterations, configuration.getMaxIterations(),
                     bestCurrentSolution, bestPreviousSolution);
             bestPreviousSolution = bestCurrentSolution;
+            System.out.println(bestCurrentSolution);
         }
         return bestPreviousSolution;
     }
 
     private boolean isStopArgumentsMet(long numberOfIterations, long maxIterations, Entity bestSolution, Entity bestPreviousSolution) {
-        if (numberOfIterations >= configuration.getMaxIterations()) return false;
+        if (numberOfIterations >= configuration.getMaxIterations()) return true;
         //TODO calculate real precision
-        return true;
+        return false;
     }
 
     public static String functionToSolve() {

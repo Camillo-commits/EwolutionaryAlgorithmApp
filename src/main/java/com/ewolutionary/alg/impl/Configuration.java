@@ -1,11 +1,13 @@
 package com.ewolutionary.alg.impl;
 
 import com.ewolutionary.alg.impl.selectors.configuration.SelectorConfiguration;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
+@AllArgsConstructor
 public class Configuration {
     private int sizeOfPopulation;
     private int precision;

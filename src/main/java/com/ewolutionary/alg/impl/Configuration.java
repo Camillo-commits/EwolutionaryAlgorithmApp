@@ -19,7 +19,7 @@ public class Configuration {
     private boolean isInverter;
     private double crossingProbability;
     private double mutationProbability;
-    private double invertionProbability;
+    private double inversionProbability;
     private int xVariableCount;
     private SelectorConfiguration selectorConfiguration;
 }

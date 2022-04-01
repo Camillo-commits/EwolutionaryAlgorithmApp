@@ -2,9 +2,7 @@ package com.ewolutionary.alg.impl;
 
 import com.ewolutionary.alg.function.Functions;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -59,8 +57,8 @@ public class Entity {
     }
 
     public void setChromosomesBytes(List<byte[]> binaries) {
-        if(binaries.size() == chromosomes.size()) {
-            for(int i=0; i< binaries.size(); i++) {
+        if (binaries.size() == chromosomes.size()) {
+            for (int i = 0; i < binaries.size(); i++) {
                 chromosomes.get(i).setBinary(binaries.get(i));
             }
         }
@@ -68,9 +66,9 @@ public class Entity {
     }
 
     public double getFitness() {
-        if(null == fitness) {
-            fitness = calculateFitness();
-        }
+
+        fitness = calculateFitness();
+
         return fitness;
     }
 

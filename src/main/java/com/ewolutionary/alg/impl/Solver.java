@@ -12,16 +12,17 @@ import com.ewolutionary.alg.impl.selectors.Selector;
 import com.ewolutionary.alg.impl.selectors.SelectorOption;
 import com.ewolutionary.alg.impl.selectors.SelectorProvider;
 import com.ewolutionary.alg.impl.utils.EntityUtils;
+import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 public class Solver {
-    private Selector selector;
-    private Mutator mutator;
-    private Optional<Inverter> inverter;
-    private Crosser crosser;
-    private Configuration configuration;
+    private final Selector selector;
+    private final Mutator mutator;
+    private Inverter inverter;
+    private final Crosser crosser;
+    private final Configuration configuration;
     private static String function;
 
     public Solver(MutatorOption mutatorOption, CrosserOption crosserOption, SelectorOption selectorOption, String function, Configuration configuration) {
@@ -31,34 +32,50 @@ public class Solver {
         this.configuration = configuration;
         Solver.function = function;
         if (configuration.isInverter()) {
-            this.inverter = Optional.of(new InverterImpl());
+            this.inverter = new InverterImpl();
         }
     }
 
-    public Entity solve() {
+    public Solution solve() {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         Population population = new Population(configuration.getSizeOfPopulation(), configuration.getPrecision(),
                 configuration.getStart(), configuration.getStop(), configuration.getXVariableCount());
         boolean precisionMet = false;
-        long numberOfIterations = 0;
+        int numberOfIterations = 0;
         Entity bestPreviousSolution = null;
+        Entity bestSolution = population.getEntities().get(0);
         while (!precisionMet) {
             ++numberOfIterations;
             List<Entity> selected = selector.select(population, configuration.isEliteStrategy(),
                     configuration.getPercentOfBestToNextCentury(), configuration.getSelectorConfiguration());
             crosser.cross(selected, configuration.getCrossingProbability(), configuration.getSizeOfPopulation());
             mutator.mutate(selected, configuration.getMutationProbability());
-            if(inverter != null) inverter.ifPresent(inv -> inv.invert(selected, configuration.getInvertionProbability()));
+            if (inverter != null) {
+                inverter.invert(selected, configuration.getInversionProbability());
+            }
             Entity bestCurrentSolution = EntityUtils.findMaxBestSolution(selected);
+            population.setEntities(selected);
             precisionMet = isStopArgumentsMet(numberOfIterations, configuration.getMaxIterations(),
                     bestCurrentSolution, bestPreviousSolution);
             bestPreviousSolution = bestCurrentSolution;
-            System.out.println(bestCurrentSolution);
+            if (bestCurrentSolution.getFitness() > bestSolution.getFitness()) {
+                bestSolution = bestCurrentSolution;
+            }
+
         }
-        return bestPreviousSolution;
+        stopWatch.stop();
+
+        return Solution.builder()
+                .bestEntity(bestSolution)
+                .timeMilis(stopWatch.getTime(TimeUnit.MILLISECONDS))
+                .numberOfIterations(numberOfIterations)
+                .build();
     }
 
     private boolean isStopArgumentsMet(long numberOfIterations, long maxIterations, Entity bestSolution, Entity bestPreviousSolution) {
-        if (numberOfIterations >= configuration.getMaxIterations()) return true;
+        if (numberOfIterations >= configuration.getMaxIterations())
+            return true;
         //TODO calculate real precision
         return false;
     }

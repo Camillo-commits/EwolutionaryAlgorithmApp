@@ -1,6 +1,7 @@
 package com.ewolutionary.alg.views;
 
 import com.ewolutionary.alg.impl.Configuration;
+import com.ewolutionary.alg.impl.Entity;
 import com.ewolutionary.alg.impl.Solution;
 import com.ewolutionary.alg.impl.Solver;
 import com.ewolutionary.alg.impl.crossers.CrosserOption;
@@ -13,9 +14,10 @@ import com.ewolutionary.alg.impl.selectors.configuration.TournamentSelectorConfi
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.charts.Chart;
+import com.vaadin.flow.component.charts.model.*;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.notification.Notification;
@@ -23,8 +25,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
-import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -75,6 +75,7 @@ public class View extends HorizontalLayout {
             Button save = new Button("Save");
             Button cancel = new Button("Cancel");
             Dialog dialog = new Dialog();
+            dialog.setCloseOnOutsideClick(false);
             cancel.addClickListener(e -> {
                 if (selectorConfiguration != null) {
                     dialog.close();
@@ -146,9 +147,9 @@ public class View extends HorizontalLayout {
         Details functionConfiguration = new Details("Function configuration", functionLayout);
 
         VerticalLayout configurationLayout = new VerticalLayout(
-                new HorizontalLayout(start, stop, sizeOfPopulation, precision),
-                new HorizontalLayout(maxIterations, percentOfBestToNextCentury, crossingProbability, mutationProbability,
-                        inversionProbability));
+                new HorizontalLayout(start, stop, sizeOfPopulation),
+                new HorizontalLayout(precision, maxIterations, percentOfBestToNextCentury),
+                new HorizontalLayout(crossingProbability, mutationProbability, inversionProbability));
         configurationLayout.setPadding(true);
         configurationLayout.addClassName(".gap-m");
         configurationLayout.setSpacing(true);
@@ -162,6 +163,18 @@ public class View extends HorizontalLayout {
         crossingProbability.setWidthFull();
         mutationProbability.setWidthFull();
         inversionProbability.setWidthFull();
+
+        mutationProbability.setMin(0);
+        mutationProbability.setMax(1);
+        mutationProbability.setPlaceholder("0.XXX");
+
+        crossingProbability.setMin(0);
+        crossingProbability.setMax(1);
+        crossingProbability.setPlaceholder("0.XXX");
+
+        inversionProbability.setMin(0);
+        inversionProbability.setMax(1);
+        inversionProbability.setPlaceholder("0.XXX");
 
         Details configurationDetails = new Details("Additional configuration", configurationLayout);
 
@@ -197,15 +210,32 @@ public class View extends HorizontalLayout {
                 if (!inversionProbability.isEmpty()) {
                     builder.inversionProbability(inversionProbability.getValue());
                 }
+                configuration = builder.build();
                 solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(),
-                        getFunction(), builder.build());
+                        getFunction(), configuration);
 
                 solution = solver.solve();
-                Dialog result = new Dialog(
-                        new Html("<p>Time:" + solution.getTimeMilis() + "ms" +
+                VerticalLayout resultLayout = new VerticalLayout(
+                        new Html("<p>Time: " + solution.getTimeMilis() + "ms" +
                                 "<br>Number of iterations: " + solution.getNumberOfIterations() +
                                 "<br>Found solution: " + solution.getBestEntity().toString().replace("value", "<br>value") + "</p>")
                 );
+
+                if (configuration.getXVariableCount() == 2) {
+                    Chart chart = genChartTwoVariables();
+                    resultLayout.add(chart);
+                } else if (configuration.getXVariableCount() == 1) {
+                    //TODO NOT WORKING 4 ONE VARIABLE
+                    solution.getBestEntityInEachIteration().forEach(entity -> entity.getValue().add(entity.getFitness()));
+                    Chart chart = genChartTwoVariables();
+                    //Chart chart = genChartOneVariable();
+                    resultLayout.add(chart);
+                }
+
+                resultLayout.add(new Text("To exit press ESC"));
+
+                Dialog result = new Dialog(resultLayout);
+                result.setCloseOnOutsideClick(false);
                 result.open();
             }
         });
@@ -232,6 +262,88 @@ public class View extends HorizontalLayout {
                 || start.isEmpty() || stop.isEmpty() || numOfVariables.isEmpty()
                 || sizeOfPopulation.isEmpty() || precision.isEmpty() || maxIterations.isEmpty()
                 || crossingProbability.isEmpty() || mutationProbability.isEmpty() || isFunctionEmpty;
+    }
+
+    private Chart genChartTwoVariables() {
+        Chart chart = new Chart(ChartType.SCATTER);
+        com.vaadin.flow.component.charts.model.Configuration conf = chart.getConfiguration();
+        conf.setTitle("Best solutions in each iteration");
+        conf.getxAxis().setTitle("X0");
+        conf.getyAxis().setTitle("X1");
+        conf.getxAxis().setStartOnTick(true);
+        conf.getxAxis().setShowLastLabel(true);
+        conf.getxAxis().setEndOnTick(true);
+
+        conf.getxAxis().setMax(configuration.getStop());
+        conf.getxAxis().setMin(configuration.getStart());
+        conf.getyAxis().setMax(configuration.getStop());
+        conf.getyAxis().setMin(configuration.getStart());
+
+        DataSeries series = new DataSeries();
+        PlotOptionsScatter options = new PlotOptionsScatter();
+        SeriesTooltip seriesTooltip = new SeriesTooltip();
+        seriesTooltip.setFollowPointer(true);
+        seriesTooltip.setPointFormat("{point.name}");
+        options.setTooltip(seriesTooltip);
+        options.setAllowPointSelect(true);
+        series.setPlotOptions(options);
+
+        int iter = 0;
+        for (Entity e : solution.getBestEntityInEachIteration()) {
+            DataSeriesItem point = new DataSeriesItem(e.getValue().get(0), e.getValue().get(1));
+
+            point.setName("Iteration " + iter + " Value: " + e.getFitness());
+
+            series.add(point);
+            iter++;
+        }
+        conf.addSeries(series);
+        Tooltip tooltip = new Tooltip(true);
+        tooltip.setPointFormat("{point.name}");
+        conf.setTooltip(tooltip);
+
+        return chart;
+    }
+
+    private Chart genChartOneVariable() {
+        Chart chart = new Chart(ChartType.SCATTER);
+        com.vaadin.flow.component.charts.model.Configuration conf = chart.getConfiguration();
+        conf.setTitle("Best solutions in each iteration");
+        conf.getxAxis().setTitle("X");
+        conf.getyAxis().setTitle("Y");
+        conf.getxAxis().setStartOnTick(true);
+        conf.getxAxis().setShowLastLabel(true);
+        conf.getxAxis().setEndOnTick(true);
+
+        conf.getxAxis().setMax(configuration.getStop());
+        conf.getxAxis().setMin(configuration.getStart());
+        conf.getyAxis().setMax(configuration.getStop());
+        conf.getyAxis().setMin(configuration.getStart());
+
+        DataSeries series = new DataSeries();
+        PlotOptionsScatter options = new PlotOptionsScatter();
+        SeriesTooltip seriesTooltip = new SeriesTooltip();
+        seriesTooltip.setFollowPointer(true);
+        seriesTooltip.setPointFormat("{point.name}");
+        options.setTooltip(seriesTooltip);
+        options.setAllowPointSelect(true);
+        series.setPlotOptions(options);
+
+        int iter = 0;
+        for (Entity e : solution.getBestEntityInEachIteration()) {
+            DataSeriesItem point = new DataSeriesItem(e.getValue().get(0), e.getFitness());
+
+            point.setName("Iteration " + iter + " Value: " + e.getFitness());
+
+            series.add(point);
+            iter++;
+        }
+        conf.addSeries(series);
+        Tooltip tooltip = new Tooltip(true);
+        tooltip.setPointFormat("{point.name}");
+        conf.setTooltip(tooltip);
+
+        return chart;
     }
 
     public static void main(String[] args) {

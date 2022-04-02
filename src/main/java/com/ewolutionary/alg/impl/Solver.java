@@ -14,6 +14,7 @@ import com.ewolutionary.alg.impl.selectors.SelectorProvider;
 import com.ewolutionary.alg.impl.utils.EntityUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +40,7 @@ public class Solver {
     public Solution solve() {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
+        List<Entity> bestSolutions = new ArrayList<>();
         Population population = new Population(configuration.getSizeOfPopulation(), configuration.getPrecision(),
                 configuration.getStart(), configuration.getStop(), configuration.getXVariableCount());
         boolean precisionMet = false;
@@ -59,6 +61,7 @@ public class Solver {
             precisionMet = isStopArgumentsMet(numberOfIterations, configuration.getMaxIterations(),
                     bestCurrentSolution, bestPreviousSolution);
             bestPreviousSolution = bestCurrentSolution;
+            bestSolutions.add(bestPreviousSolution);
             if (bestCurrentSolution.getFitness() > bestSolution.getFitness()) {
                 bestSolution = bestCurrentSolution;
             }
@@ -68,6 +71,7 @@ public class Solver {
 
         return Solution.builder()
                 .bestEntity(bestSolution)
+                .bestEntityInEachIteration(bestSolutions)
                 .timeMilis(stopWatch.getTime(TimeUnit.MILLISECONDS))
                 .numberOfIterations(numberOfIterations)
                 .build();

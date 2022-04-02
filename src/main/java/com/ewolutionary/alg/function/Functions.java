@@ -10,10 +10,10 @@ public class Functions {
         if(name == null) {
             throw new IllegalArgumentException("Function cannot be null!!!");
         }
-        switch(name) {
-            case "2x^2+5":
+        switch (name) {
+            case "2x0^2+5":
                 return functionPow2xPlus5(x);
-            case "x1^2+x2":
+            case "x0^2+x1":
                 return functionX1PowPlusX2(x);
             case "BealFunction":
                 return bealFunction(x);

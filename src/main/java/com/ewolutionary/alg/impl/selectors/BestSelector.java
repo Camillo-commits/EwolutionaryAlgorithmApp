@@ -22,15 +22,6 @@ public class BestSelector implements Selector {
 
         List<Entity> result = new ArrayList<>();
         int amount2Select = (int) (population.getEntities().size() * (double) configuration.getConfigurations().get(BEST_PERCENTAGE));
-        if (isEliteStrategy) {
-            amount2Select -= population.getEntities().size() * percentOfBestToNextCentury / 100;
-            List<Entity> sorted = population.getEntities()
-                    .stream()
-                    .sorted(Comparator.comparingDouble(Entity::getFitness).reversed())
-                    .collect(Collectors.toList());
-            result.addAll(sorted.subList(0, percentOfBestToNextCentury / 100));
-            population.getEntities().removeAll(result);
-        }
 
         List<Entity> entities = population.getEntities()
                 .stream()

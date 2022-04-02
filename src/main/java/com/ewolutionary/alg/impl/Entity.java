@@ -65,7 +65,7 @@ public class Entity {
         this.entityValue = calculateValue();
     }
 
-    public double getFitness() {
+    public Double getFitness() {
 
         fitness = calculateFitness();
 

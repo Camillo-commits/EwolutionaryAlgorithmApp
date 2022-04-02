@@ -7,14 +7,14 @@ import java.util.List;
 public class Functions {
 
     public static double function(String name, List<Double> x) {
-        if(name == null) {
+        if (name == null) {
             //TODO get input function
             return 0;
         }
-        switch(name) {
-            case "2x^2+5":
+        switch (name) {
+            case "2x0^2+5":
                 return functionPow2xPlus5(x);
-            case "x1^2+x2":
+            case "x0^2+x1":
                 return functionX1PowPlusX2(x);
             default:
                 return ExpressionSolver.solve(name, x);

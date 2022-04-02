@@ -28,6 +28,9 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @PageTitle("")
 @Route(value = "")
 public class View extends HorizontalLayout {
@@ -37,7 +40,9 @@ public class View extends HorizontalLayout {
     private final ComboBox<SelectorOption> selectors = new ComboBox<>("Selector", SelectorOption.values());
     private final Checkbox isInverter = new Checkbox("Inverter");
     private final Checkbox isEliteStrategy = new Checkbox("Elite strategy");
-    private final ComboBox<String> buildInFunction = new ComboBox<>("Build in function", "x0^2+x1", "2x0^2+5");
+    private final ComboBox<String> buildInFunction = new ComboBox<>("Build in function", "x0^2+x1", "2x0^2+5", "BealFunction");
+    private final Checkbox isCustom = new Checkbox("Custom");
+    private final TextField customFunction = new TextField("Custom function");
     private final Button solveButton = new Button("Solve");
     //4 config
     private final IntegerField sizeOfPopulation = new IntegerField("Size of population");
@@ -119,16 +124,27 @@ public class View extends HorizontalLayout {
         });
 
         VerticalLayout functionLayout = new VerticalLayout(
-                new HorizontalLayout(buildInFunction, numOfVariables)
+                new HorizontalLayout(buildInFunction, isCustom, customFunction, numOfVariables)
         );
         functionLayout.setPadding(true);
         functionLayout.addClassName(".gap-m");
         functionLayout.setSpacing(true);
         buildInFunction.setWidthFull();
         numOfVariables.setWidthFull();
+        isCustom.setWidthFull();
+        customFunction.setWidthFull();
+
+        isCustom.addClickListener(e -> {
+            if(isCustom.getValue()) {
+                customFunction.setEnabled(true);
+                buildInFunction.setEnabled(false);
+            } else {
+                customFunction.setEnabled(false);
+                buildInFunction.setEnabled(true);
+            }
+        });
 
         Details functionConfiguration = new Details("Function configuration", functionLayout);
-        buildInFunction.setAllowCustomValue(true);
 
         VerticalLayout configurationLayout = new VerticalLayout(
                 new HorizontalLayout(start, stop, sizeOfPopulation),
@@ -164,20 +180,12 @@ public class View extends HorizontalLayout {
 
         percentOfBestToNextCentury.setEnabled(false);
         isEliteStrategy.addClickListener(click -> {
-            if (isEliteStrategy.getValue()) {
-                percentOfBestToNextCentury.setEnabled(true);
-            } else {
-                percentOfBestToNextCentury.setEnabled(false);
-            }
+            percentOfBestToNextCentury.setEnabled(isEliteStrategy.getValue());
         });
 
         inversionProbability.setEnabled(false);
         isInverter.addClickListener(click -> {
-            if (isInverter.getValue()) {
-                inversionProbability.setEnabled(true);
-            } else {
-                inversionProbability.setEnabled(false);
-            }
+            inversionProbability.setEnabled(isInverter.getValue());
         });
 
         solveButton.addClickListener(event -> {
@@ -204,7 +212,7 @@ public class View extends HorizontalLayout {
                 }
                 configuration = builder.build();
                 solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(),
-                        buildInFunction.getValue(), configuration);
+                        getFunction(), configuration);
 
                 solution = solver.solve();
                 VerticalLayout resultLayout = new VerticalLayout(
@@ -238,11 +246,22 @@ public class View extends HorizontalLayout {
         add(layout);
     }
 
+    private String getFunction() {
+        if(isCustom.getValue() && !customFunction.isEmpty()) {
+            return customFunction.getValue();
+        }
+        if(!isCustom.getValue() && !buildInFunction.isEmpty()) {
+            return buildInFunction.getValue();
+        }
+        throw new IllegalArgumentException("Function cannot be null!");
+    }
+
     private boolean requiredFieldsEmpty() {
+        boolean isFunctionEmpty = (isCustom.getValue() && customFunction.isEmpty()) || (!isCustom.getValue() && buildInFunction.isEmpty());
         return crossers.isEmpty() || mutators.isEmpty() || selectors.isEmpty()
                 || start.isEmpty() || stop.isEmpty() || numOfVariables.isEmpty()
                 || sizeOfPopulation.isEmpty() || precision.isEmpty() || maxIterations.isEmpty()
-                || crossingProbability.isEmpty() || mutationProbability.isEmpty() || buildInFunction.isEmpty();
+                || crossingProbability.isEmpty() || mutationProbability.isEmpty() || isFunctionEmpty;
     }
 
     private Chart genChartTwoVariables() {

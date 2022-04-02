@@ -1,6 +1,7 @@
 package com.ewolutionary.alg.impl.parser;
 
 //import com.bgsoftware.superiorskyblock.scripts.RhinoScript;
+import com.bgsoftware.superiorskyblock.scripts.RhinoScript;
 import com.ewolutionary.alg.impl.Entity;
 
 import javax.script.ScriptException;
@@ -11,8 +12,8 @@ public class ExpressionSolver {
 
     private ExpressionSolver() {}
 
-    public static double solve(String expression, Entity entity) {
-        expression = fillExpressionWithEntityValues(expression, entity);
+    public static double solve(String expression, List<Double> values) {
+        expression = fillExpressionWithEntityValues(expression, values);
 
         if(expression.indexOf("pow(")>expression.indexOf("sqrt(")){
             while(expression.contains("pow")) {
@@ -30,21 +31,24 @@ public class ExpressionSolver {
             }
         }
 
-//        RhinoScript rs = RhinoScript.getInstance();
-//        String strResult;
-//
-//        try {
-//            strResult = rs.eval(expression).toString();
-//            return Double.parseDouble(strResult);
-//        } catch (ScriptException e) {
-//            e.printStackTrace();
-//        }
+        RhinoScript rs = RhinoScript.getInstance();
+        String strResult;
+
+        try {
+            strResult = rs.eval(expression).toString();
+            return Double.parseDouble(strResult);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
 
         return 0.0;
     }
 
-    private static String fillExpressionWithEntityValues(String expression, Entity entity) {
-        return "";
+    private static String fillExpressionWithEntityValues(String expression, List<Double> values) {
+        for(int i=0; i<values.size(); i++) {
+            expression = expression.replace("x"+i, Double.toString(values.get(i)));
+        }
+        return expression;
     }
 
     private static String resolvePowerFunction(String expression) {

@@ -1,5 +1,7 @@
 package com.ewolutionary.alg.function;
 
+import com.ewolutionary.alg.impl.parser.ExpressionSolver;
+
 import java.util.List;
 
 public class Functions {
@@ -15,7 +17,7 @@ public class Functions {
             case "x1^2+x2":
                 return functionX1PowPlusX2(x);
             default:
-                return 0;
+                return ExpressionSolver.solve(name, x);
         }
 
     }

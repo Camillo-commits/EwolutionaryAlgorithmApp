@@ -10,10 +10,12 @@ import com.ewolutionary.alg.impl.selectors.configuration.BestSelectorConfigurati
 import com.ewolutionary.alg.impl.selectors.configuration.RouletteSelectorConfiguration;
 import com.ewolutionary.alg.impl.selectors.configuration.SelectorConfiguration;
 import com.ewolutionary.alg.impl.selectors.configuration.TournamentSelectorConfiguration;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.notification.Notification;
@@ -21,6 +23,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -34,7 +37,7 @@ public class View extends HorizontalLayout {
     private final ComboBox<SelectorOption> selectors = new ComboBox<>("Selector", SelectorOption.values());
     private final Checkbox isInverter = new Checkbox("Inverter");
     private final Checkbox isEliteStrategy = new Checkbox("Elite strategy");
-    private final TextField function = new TextField("x1^2+x2");
+    private final ComboBox<String> buildInFunction = new ComboBox<>("Build in function", "x0^2+x1", "2x0^2+5");
     private final Button solveButton = new Button("Solve");
     //4 config
     private final IntegerField sizeOfPopulation = new IntegerField("Size of population");
@@ -55,7 +58,7 @@ public class View extends HorizontalLayout {
 
     public View() {
         VerticalLayout layout = new VerticalLayout();
-        HorizontalLayout comboBoxesLayout = new HorizontalLayout(crossers, mutators, selectors, function);
+        HorizontalLayout comboBoxesLayout = new HorizontalLayout(crossers, mutators, selectors);
         comboBoxesLayout.setPadding(true);
         comboBoxesLayout.setVerticalComponentAlignment(Alignment.CENTER);
 
@@ -114,8 +117,20 @@ public class View extends HorizontalLayout {
 
         });
 
+        VerticalLayout functionLayout = new VerticalLayout(
+                new HorizontalLayout(buildInFunction, numOfVariables)
+        );
+        functionLayout.setPadding(true);
+        functionLayout.addClassName(".gap-m");
+        functionLayout.setSpacing(true);
+        buildInFunction.setWidthFull();
+        numOfVariables.setWidthFull();
+
+        Details functionConfiguration = new Details("Function configuration", functionLayout);
+        buildInFunction.setAllowCustomValue(true);
+
         VerticalLayout configurationLayout = new VerticalLayout(
-                new HorizontalLayout(start, stop, numOfVariables, sizeOfPopulation, precision),
+                new HorizontalLayout(start, stop, sizeOfPopulation, precision),
                 new HorizontalLayout(maxIterations, percentOfBestToNextCentury, crossingProbability, mutationProbability,
                         inversionProbability));
         configurationLayout.setPadding(true);
@@ -131,7 +146,6 @@ public class View extends HorizontalLayout {
         crossingProbability.setWidthFull();
         mutationProbability.setWidthFull();
         inversionProbability.setWidthFull();
-        numOfVariables.setWidthFull();
 
         Details configurationDetails = new Details("Additional configuration", configurationLayout);
 
@@ -176,20 +190,21 @@ public class View extends HorizontalLayout {
                     builder.inversionProbability(inversionProbability.getValue());
                 }
                 solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(),
-                        function.getValue(), builder.build());
+                        buildInFunction.getValue(), builder.build());
 
                 solution = solver.solve();
-                Dialog result = new Dialog(new VerticalLayout(
-                        new Text("SOLVED \n" + "solution time: " + solution.getTimeMilis() + "ms\n" +
-                                "Number of iterations: " + solution.getNumberOfIterations() +
-                                "\nFound solution: " + solution.getBestEntity().toString())));
+                Dialog result = new Dialog(
+                        new Html("<p>Time:" + solution.getTimeMilis() + "ms" +
+                                "<br>Number of iterations: " + solution.getNumberOfIterations() +
+                                "<br>Found solution: " + solution.getBestEntity().toString().replace("value", "<br>value") + "</p>")
+                );
                 result.open();
             }
         });
 
         HorizontalLayout solveButtonLayout = new HorizontalLayout(solveButton);
         solveButtonLayout.setPadding(true);
-        layout.add(comboBoxesLayout, configurationDetails, buttons, solveButtonLayout);
+        layout.add(comboBoxesLayout, functionConfiguration, configurationDetails, buttons, solveButtonLayout);
         add(layout);
     }
 
@@ -197,7 +212,7 @@ public class View extends HorizontalLayout {
         return crossers.isEmpty() || mutators.isEmpty() || selectors.isEmpty()
                 || start.isEmpty() || stop.isEmpty() || numOfVariables.isEmpty()
                 || sizeOfPopulation.isEmpty() || precision.isEmpty() || maxIterations.isEmpty()
-                || crossingProbability.isEmpty() || mutationProbability.isEmpty() || function.isEmpty();
+                || crossingProbability.isEmpty() || mutationProbability.isEmpty() || buildInFunction.isEmpty();
     }
 
     public static void main(String[] args) {

@@ -38,7 +38,7 @@ public class InverterImpl implements Inverter {
 
             byte[] selectedBinary = new byte[secondInvertionPoint - firstInvertionPoint];
             int j = 0;
-            for(int i = firstInvertionPoint; i <= secondInvertionPoint; i++){
+            for(int i = firstInvertionPoint; i < secondInvertionPoint; i++){
                 selectedBinary[j] = binary[i];
                 j++;
             }
@@ -46,7 +46,7 @@ public class InverterImpl implements Inverter {
             ArrayUtils.reverse(selectedBinary);
 
             j = 0;
-            for(int i = firstInvertionPoint; i <= secondInvertionPoint; i++){
+            for(int i = firstInvertionPoint; i < secondInvertionPoint; i++){
                binary[i] = selectedBinary[j];
                j++;
             }

@@ -33,6 +33,7 @@ public class TournamentSelector implements Selector {
             for (int j = 0; j < numberOfTournaments; j++)
                 selected.add(tournament(pool, entitiesInOneTournament));
             pool = selected;
+            if(selected.size() == 1) break;
         }
         population.setEntities(pool);
         return pool;

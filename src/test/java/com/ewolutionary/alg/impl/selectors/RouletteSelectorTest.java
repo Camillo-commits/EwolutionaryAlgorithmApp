@@ -7,12 +7,9 @@ import com.ewolutionary.alg.impl.selectors.configuration.RouletteSelectorConfigu
 import org.bouncycastle.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import static org.testng.Assert.*;
 
@@ -26,7 +23,7 @@ public class RouletteSelectorTest {
         Population p = getMinPopulation();
         System.out.println(p);
 
-        Solver.overrideFunctionToSolve("x1^2+x2");
+        Solver.overrideFunctionToSolve("x0^2+x1");
         List<Entity> selected = rs.select(p, false, 0, rsc);
         System.out.println(selected);
 
@@ -40,7 +37,7 @@ public class RouletteSelectorTest {
         Population p = getPopulation();
         RouletteSelectorConfiguration rsc = new RouletteSelectorConfiguration(0.20);
 
-        Solver.overrideFunctionToSolve("2x^2+5");
+        Solver.overrideFunctionToSolve("2x0^2+5");
         List<Entity> selected = rs.select(p, true, 1, rsc);
 
 
@@ -64,7 +61,7 @@ public class RouletteSelectorTest {
         Population p = getPopulation();
         RouletteSelectorConfiguration rsc = new RouletteSelectorConfiguration(0.20);
 
-        Solver.overrideFunctionToSolve("2x^2+5");
+        Solver.overrideFunctionToSolve("2x0^2+5");
 
         List<Entity> selected = rs.select(p, false, 0, rsc);
 
@@ -75,7 +72,6 @@ public class RouletteSelectorTest {
             selected = rs.select(p, false, 0, rsc);
         }
 
-//        System.out.println(selected);
         assertEquals(selected.size(), 20);
         Optional<Entity> en = selected.stream().filter(e -> e.getValue().get(0) == 3.937007874015748).findAny();
         assertTrue(en.isPresent());

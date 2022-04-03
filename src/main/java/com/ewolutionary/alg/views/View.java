@@ -33,7 +33,9 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @PageTitle("")
 @Route(value = "")
@@ -45,7 +47,8 @@ public class View extends HorizontalLayout {
     private final ComboBox<String> functionMinMax = new ComboBox<>("Function value", "MIN", "MAX");
     private final Checkbox isInverter = new Checkbox("Inverter");
     private final Checkbox isEliteStrategy = new Checkbox("Elite strategy");
-    private final ComboBox<String> buildInFunction = new ComboBox<>("Build in function", "x0^2+x1", "2x0^2+5", "BealFunction", "BraninFunction", "EasomFunction");
+    private final ComboBox<String> buildInFunction = new ComboBox<>("Build in function");
+    private final Map<String, Integer> internalFunctions = Map.of("x0^2+x1", 2, "2x0^2+5", 1, "BealFunction", 2, "BraninFunction", 2, "EasomFunction", 2);
     private final Checkbox isCustom = new Checkbox("Custom");
     private final TextField customFunction = new TextField("Custom function");
     private final Button solveButton = new Button("Solve");
@@ -137,17 +140,22 @@ public class View extends HorizontalLayout {
         functionLayout.addClassName(".gap-m");
         functionLayout.setSpacing(true);
         buildInFunction.setWidthFull();
+        buildInFunction.setItems(internalFunctions.keySet());
         numOfVariables.setWidthFull();
         isCustom.setWidthFull();
         functionMinMax.setWidthFull();
         customFunction.setWidthFull();
+        customFunction.setEnabled(false);
+        numOfVariables.setEnabled(false);
 
         isCustom.addClickListener(e -> {
             if(isCustom.getValue()) {
                 customFunction.setEnabled(true);
+                numOfVariables.setEnabled(true);
                 buildInFunction.setEnabled(false);
             } else {
                 customFunction.setEnabled(false);
+                numOfVariables.setEnabled(false);
                 buildInFunction.setEnabled(true);
             }
         });
@@ -200,6 +208,8 @@ public class View extends HorizontalLayout {
             if (requiredFieldsEmpty()) {
                 Notification.show("Fill out all the required fields");
             } else {
+                int numberOfX = isCustom.getValue()?numOfVariables.getValue():internalFunctions.get(buildInFunction.getValue());
+
                 Configuration.ConfigurationBuilder builder = Configuration.builder()
                         .isInverter(isInverter.getValue())
                         .sizeOfPopulation(sizeOfPopulation.getValue())
@@ -211,7 +221,7 @@ public class View extends HorizontalLayout {
                         .crossingProbability(crossingProbability.getValue())
                         .isEliteStrategy(isEliteStrategy.getValue())
                         .mutationProbability(mutationProbability.getValue())
-                        .xVariableCount(numOfVariables.getValue());
+                        .xVariableCount(numberOfX);
                 if (!percentOfBestToNextCentury.isEmpty()) {
                     builder.percentOfBestToNextCentury(percentOfBestToNextCentury.getValue());
                 }
@@ -271,7 +281,7 @@ public class View extends HorizontalLayout {
     private boolean requiredFieldsEmpty() {
         boolean isFunctionEmpty = (isCustom.getValue() && customFunction.isEmpty()) || (!isCustom.getValue() && buildInFunction.isEmpty());
         return crossers.isEmpty() || mutators.isEmpty() || selectors.isEmpty()
-                || start.isEmpty() || stop.isEmpty() || numOfVariables.isEmpty()
+                || start.isEmpty() || stop.isEmpty() || (numOfVariables.isEmpty() && isCustom.getValue())
                 || sizeOfPopulation.isEmpty() || precision.isEmpty() || maxIterations.isEmpty()
                 || crossingProbability.isEmpty() || mutationProbability.isEmpty() || functionMinMax.isEmpty() || isFunctionEmpty;
     }

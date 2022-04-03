@@ -103,7 +103,7 @@ public class Solver {
                 .build();
     }
 
-    private double calculateSD(double numArray[])
+    private double calculateSD(double[] numArray)
     {
         double sum = 0.0, standardDeviation = 0.0;
         int length = numArray.length;

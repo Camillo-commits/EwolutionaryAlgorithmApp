@@ -1,6 +1,7 @@
 package com.ewolutionary.alg.impl;
 
 import com.ewolutionary.alg.function.Functions;
+import com.helger.commons.annotation.VisibleForTesting;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,6 +105,11 @@ public class Entity {
 
     public void setElite(boolean elite) {
         isElite = elite;
+    }
+
+    @VisibleForTesting
+    private void setEntityValue(List<Double> list) {
+        this.entityValue = list;
     }
 
     @Override

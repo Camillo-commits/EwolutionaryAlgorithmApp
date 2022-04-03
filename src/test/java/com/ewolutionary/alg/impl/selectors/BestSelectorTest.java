@@ -2,6 +2,7 @@ package com.ewolutionary.alg.impl.selectors;
 
 import com.ewolutionary.alg.impl.Entity;
 import com.ewolutionary.alg.impl.Population;
+import com.ewolutionary.alg.impl.Solver;
 import com.ewolutionary.alg.impl.selectors.configuration.BestSelectorConfiguration;
 import junitx.util.PrivateAccessor;
 import org.junit.Assert;
@@ -20,11 +21,16 @@ public class BestSelectorTest {
     public void shouldSelectBest() throws Throwable {
         List<Entity> entityList = new ArrayList<>(Arrays.asList());
 
+        Solver.overrideFunctionToSolve("x0");
+
         for (double i = 0; i < 100; ++i) {
             Entity entity = new Entity(0, 1, 0, 1);
             Class[] classes = { Double.class };
             Object[] objects = { i };
             PrivateAccessor.invoke(entity, "setFitness", classes, objects);
+            classes = new Class[]{List.class};
+            objects = new Object[]{List.of(i)};
+            PrivateAccessor.invoke(entity, "setEntityValue", classes, objects);
             entityList.add(entity);
         }
 

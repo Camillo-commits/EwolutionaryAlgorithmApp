@@ -28,19 +28,32 @@ public class RouletteSelector implements Selector {
                 .sorted(Comparator.comparingDouble(Entity::calculateFitness))
                 .collect(Collectors.toList());
         if(isEliteStrategy) {
-            selectedEntities.addAll(entities.subList(0, elite2Select));
+            if(Functions.MINIMUM) {
+                selectedEntities.addAll(entities.subList(entities.size()-elite2Select, entities.size()));
+            } else {
+                selectedEntities.addAll(entities.subList(0, elite2Select));
+            }
             entities.removeAll(selectedEntities);
             amount2Select -= elite2Select;
         }
 
-        double fitnessCount = entities.stream().mapToDouble(Entity::getFitness).sum();
+        double fitnessCount;
+        if(Functions.MINIMUM) {
+            fitnessCount = entities.stream().mapToDouble(e -> (1./ e.getFitness())).sum();
+        } else {
+            fitnessCount = entities.stream().mapToDouble(Entity::getFitness).sum();
+        }
 
         Map<Entity, Double> mapEntitiesProbability = new LinkedHashMap<>();
 
         double entitiesFitness = 0;
         double entityFitness = 0;
         for(Entity e: entities) {
-            entityFitness = e.getFitness() / fitnessCount;
+            if(Functions.MINIMUM) {
+                entityFitness = 1./e.getFitness() / fitnessCount;
+            } else {
+                entityFitness = e.getFitness() / fitnessCount;
+            }
             entitiesFitness += entityFitness;
             mapEntitiesProbability.put(e, entitiesFitness);
         }

@@ -66,9 +66,7 @@ public class Entity {
     }
 
     public Double getFitness() {
-
         fitness = calculateFitness();
-
         return fitness;
     }
 

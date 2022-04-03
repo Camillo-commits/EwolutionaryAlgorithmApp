@@ -1,5 +1,6 @@
 package com.ewolutionary.alg.impl;
 
+import com.ewolutionary.alg.function.Functions;
 import com.ewolutionary.alg.impl.crossers.Crosser;
 import com.ewolutionary.alg.impl.crossers.CrosserOption;
 import com.ewolutionary.alg.impl.crossers.CrosserProvider;
@@ -56,13 +57,20 @@ public class Solver {
             if (inverter != null) {
                 inverter.invert(selected, configuration.getInversionProbability());
             }
-            Entity bestCurrentSolution = EntityUtils.findMaxBestSolution(selected);
+            Entity bestCurrentSolution;
+            if(Functions.MINIMUM) {
+                bestCurrentSolution = EntityUtils.findMinBestSolution(selected);
+            } else {
+                bestCurrentSolution = EntityUtils.findMaxBestSolution(selected);
+            }
             population.setEntities(selected);
             precisionMet = isStopArgumentsMet(numberOfIterations, configuration.getMaxIterations(),
                     bestCurrentSolution, bestPreviousSolution);
             bestPreviousSolution = bestCurrentSolution;
             bestSolutions.add(bestPreviousSolution);
-            if (bestCurrentSolution.getFitness() > bestSolution.getFitness()) {
+            if (!Functions.MINIMUM && bestCurrentSolution.getFitness() > bestSolution.getFitness()) {
+                bestSolution = bestCurrentSolution;
+            } else if (Functions.MINIMUM && bestCurrentSolution.getFitness() < bestSolution.getFitness()) {
                 bestSolution = bestCurrentSolution;
             }
 

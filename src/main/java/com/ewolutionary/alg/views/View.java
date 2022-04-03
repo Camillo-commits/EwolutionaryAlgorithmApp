@@ -1,5 +1,6 @@
 package com.ewolutionary.alg.views;
 
+import com.ewolutionary.alg.function.Functions;
 import com.ewolutionary.alg.impl.Configuration;
 import com.ewolutionary.alg.impl.Entity;
 import com.ewolutionary.alg.impl.Solution;
@@ -25,8 +26,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +41,10 @@ public class View extends HorizontalLayout {
     private final ComboBox<CrosserOption> crossers = new ComboBox<>("Crosser", CrosserOption.values());
     private final ComboBox<MutatorOption> mutators = new ComboBox<>("Mutator", MutatorOption.values());
     private final ComboBox<SelectorOption> selectors = new ComboBox<>("Selector", SelectorOption.values());
+    private final ComboBox<String> functionMinMax = new ComboBox<>("Function value", "MIN", "MAX");
     private final Checkbox isInverter = new Checkbox("Inverter");
     private final Checkbox isEliteStrategy = new Checkbox("Elite strategy");
-    private final ComboBox<String> buildInFunction = new ComboBox<>("Build in function", "x0^2+x1", "2x0^2+5", "BealFunction");
+    private final ComboBox<String> buildInFunction = new ComboBox<>("Build in function", "x0^2+x1", "2x0^2+5", "BealFunction", "BraninFunction", "EasomFunction");
     private final Checkbox isCustom = new Checkbox("Custom");
     private final TextField customFunction = new TextField("Custom function");
     private final Button solveButton = new Button("Solve");
@@ -124,7 +128,7 @@ public class View extends HorizontalLayout {
         });
 
         VerticalLayout functionLayout = new VerticalLayout(
-                new HorizontalLayout(buildInFunction, isCustom, customFunction, numOfVariables)
+                new HorizontalLayout(buildInFunction, isCustom, customFunction, numOfVariables, functionMinMax)
         );
         functionLayout.setPadding(true);
         functionLayout.addClassName(".gap-m");
@@ -132,6 +136,7 @@ public class View extends HorizontalLayout {
         buildInFunction.setWidthFull();
         numOfVariables.setWidthFull();
         isCustom.setWidthFull();
+        functionMinMax.setWidthFull();
         customFunction.setWidthFull();
 
         isCustom.addClickListener(e -> {
@@ -213,7 +218,7 @@ public class View extends HorizontalLayout {
                 configuration = builder.build();
                 solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(),
                         getFunction(), configuration);
-
+                Functions.MINIMUM = functionMinMax.getValue().equals("MIN");
                 solution = solver.solve();
                 VerticalLayout resultLayout = new VerticalLayout(
                         new Html("<p>Time: " + solution.getTimeMilis() + "ms" +
@@ -261,7 +266,7 @@ public class View extends HorizontalLayout {
         return crossers.isEmpty() || mutators.isEmpty() || selectors.isEmpty()
                 || start.isEmpty() || stop.isEmpty() || numOfVariables.isEmpty()
                 || sizeOfPopulation.isEmpty() || precision.isEmpty() || maxIterations.isEmpty()
-                || crossingProbability.isEmpty() || mutationProbability.isEmpty() || isFunctionEmpty;
+                || crossingProbability.isEmpty() || mutationProbability.isEmpty() || functionMinMax.isEmpty() || isFunctionEmpty;
     }
 
     private Chart genChartTwoVariables() {

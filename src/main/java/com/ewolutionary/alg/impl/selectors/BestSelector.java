@@ -1,5 +1,6 @@
 package com.ewolutionary.alg.impl.selectors;
 
+import com.ewolutionary.alg.function.Functions;
 import com.ewolutionary.alg.impl.Entity;
 import com.ewolutionary.alg.impl.Population;
 import com.ewolutionary.alg.impl.selectors.configuration.BestSelectorConfiguration;
@@ -27,9 +28,13 @@ public class BestSelector implements Selector {
                 .stream()
                 .sorted(Comparator.comparingDouble(Entity::getFitness).reversed())
                 .collect(Collectors.toList());
-        if (amount2Select > 0) {
+
+        if(Functions.MINIMUM) {
             result.addAll(entities.subList(0, amount2Select));
+        } else {
+            result.addAll(entities.subList(entities.size()-amount2Select, entities.size()));
         }
+
         return result;
     }
 }

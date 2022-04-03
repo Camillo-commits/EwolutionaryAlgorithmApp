@@ -54,6 +54,8 @@ public class Solver {
         Entity bestSolution = population.getEntities().get(0);
         PrintWriter out = new PrintWriter("src/main/resources/out/aimInIteration.txt");
         PrintWriter out2 = new PrintWriter("src/main/resources/out/bestAim.txt");
+        PrintWriter average = new PrintWriter("src/main/resources/out/average.txt");
+        PrintWriter sd = new PrintWriter("src/main/resources/out/sd.txt");
         out.println("iteration, x");
         out2.println("iteration, x");
 
@@ -84,10 +86,14 @@ public class Solver {
             }
             out.println(numberOfIterations + ", " + bestCurrentSolution.getFitness());
             out2.println(numberOfIterations + ", " + bestSolution.getFitness());
+            average.println(population.getEntities().stream().mapToDouble(Entity::getFitness).sum()/population.getEntities().size());
+            sd.println(calculateSD(population.getEntities().stream().mapToDouble(Entity::getFitness).toArray()));
         }
         stopWatch.stop();
         out.close();
         out2.close();
+        average.close();
+        sd.close();
 
         return Solution.builder()
                 .bestEntity(bestSolution)
@@ -95,6 +101,24 @@ public class Solver {
                 .timeMilis(stopWatch.getTime(TimeUnit.MILLISECONDS))
                 .numberOfIterations(numberOfIterations)
                 .build();
+    }
+
+    private double calculateSD(double numArray[])
+    {
+        double sum = 0.0, standardDeviation = 0.0;
+        int length = numArray.length;
+
+        for(double num : numArray) {
+            sum += num;
+        }
+
+        double mean = sum/length;
+
+        for(double num: numArray) {
+            standardDeviation += Math.pow(num - mean, 2);
+        }
+
+        return Math.sqrt(standardDeviation/length);
     }
 
     private boolean isStopArgumentsMet(long numberOfIterations, long maxIterations, Entity bestSolution, Entity bestPreviousSolution) {

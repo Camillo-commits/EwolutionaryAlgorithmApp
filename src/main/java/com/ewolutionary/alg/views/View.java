@@ -128,8 +128,10 @@ public class View extends HorizontalLayout {
 
         });
 
+        customFunction.setEnabled(false);
+
         VerticalLayout functionLayout = new VerticalLayout(
-                new HorizontalLayout(buildInFunction, isCustom, customFunction, numOfVariables, functionMinMax)
+                new VerticalLayout(new HorizontalLayout(buildInFunction, customFunction, numOfVariables, functionMinMax), isCustom)
         );
         functionLayout.setPadding(true);
         functionLayout.addClassName(".gap-m");

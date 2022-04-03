@@ -13,6 +13,8 @@ public class Functions {
             throw new IllegalArgumentException("Function cannot be null!!!");
         }
         switch (name) {
+            case "x0":
+                return x.get(0);
             case "2x0^2+5":
                 return functionPow2xPlus5(x);
             case "x0^2+x1":

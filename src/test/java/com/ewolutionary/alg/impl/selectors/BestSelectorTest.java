@@ -23,11 +23,16 @@ public class BestSelectorTest {
     public void shouldSelectBest() throws Throwable {
         List<Entity> entityList = new ArrayList<>(Arrays.asList());
 
+        Solver.overrideFunctionToSolve("x0");
+
         for (double i = 0; i < 100; ++i) {
             Entity entity = new Entity(0, 1, 0, 1);
             Class[] classes = {Double.class};
             Object[] objects = {i};
             PrivateAccessor.invoke(entity, "setFitness", classes, objects);
+            classes = new Class[]{List.class};
+            objects = new Object[]{List.of(i)};
+            PrivateAccessor.invoke(entity, "setEntityValue", classes, objects);
             entityList.add(entity);
         }
 

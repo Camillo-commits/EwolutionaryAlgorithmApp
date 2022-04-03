@@ -30,9 +30,9 @@ public class BestSelector implements Selector {
                 .collect(Collectors.toList());
 
         if(Functions.MINIMUM) {
-            result.addAll(entities.subList(0, amount2Select));
-        } else {
             result.addAll(entities.subList(entities.size()-amount2Select, entities.size()));
+        } else {
+            result.addAll(entities.subList(0, amount2Select));
         }
 
         return result;

@@ -31,6 +31,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,7 +220,11 @@ public class View extends HorizontalLayout {
                 solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(),
                         getFunction(), configuration);
                 Functions.MINIMUM = functionMinMax.getValue().equals("MIN");
-                solution = solver.solve();
+                try {
+                    solution = solver.solve();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 VerticalLayout resultLayout = new VerticalLayout(
                         new Html("<p>Time: " + solution.getTimeMilis() + "ms" +
                                 "<br>Number of iterations: " + solution.getNumberOfIterations() +
@@ -349,12 +354,6 @@ public class View extends HorizontalLayout {
         conf.setTooltip(tooltip);
 
         return chart;
-    }
-
-    public static void main(String[] args) {
-        Configuration conf = new Configuration(10, 2, -10, 10, 20, 10, true, false, 0.25, 0.20, 0.25, 1, new RouletteSelectorConfiguration(0.20));
-        Solver solver = new Solver(MutatorOption.ONE_POINT, CrosserOption.HOMOGENEOUS, SelectorOption.ROULETTE, "2x^2+5", conf);
-        Solution e = solver.solve();
     }
 
 }

@@ -15,6 +15,10 @@ import com.ewolutionary.alg.impl.selectors.SelectorProvider;
 import com.ewolutionary.alg.impl.utils.EntityUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +42,7 @@ public class Solver {
         }
     }
 
-    public Solution solve() {
+    public Solution solve() throws IOException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         List<Entity> bestSolutions = new ArrayList<>();
@@ -48,6 +52,11 @@ public class Solver {
         int numberOfIterations = 0;
         Entity bestPreviousSolution = null;
         Entity bestSolution = population.getEntities().get(0);
+        PrintWriter out = new PrintWriter("src/main/resources/out/aimInIteration.txt");
+        PrintWriter out2 = new PrintWriter("src/main/resources/out/bestAim.txt");
+        out.println("iteration, x");
+        out2.println("iteration, x");
+
         while (!precisionMet) {
             ++numberOfIterations;
             List<Entity> selected = selector.select(population, configuration.isEliteStrategy(),
@@ -73,9 +82,12 @@ public class Solver {
             } else if (Functions.MINIMUM && bestCurrentSolution.getFitness() < bestSolution.getFitness()) {
                 bestSolution = bestCurrentSolution;
             }
-
+            out.println(numberOfIterations + ", " + bestCurrentSolution.getFitness());
+            out2.println(numberOfIterations + ", " + bestSolution.getFitness());
         }
         stopWatch.stop();
+        out.close();
+        out2.close();
 
         return Solution.builder()
                 .bestEntity(bestSolution)

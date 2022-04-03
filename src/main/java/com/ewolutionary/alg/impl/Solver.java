@@ -54,8 +54,8 @@ public class Solver {
         Entity bestSolution = population.getEntities().get(0);
         PrintWriter out = new PrintWriter("src/main/resources/out/aimInIteration.txt");
         PrintWriter out2 = new PrintWriter("src/main/resources/out/bestAim.txt");
-        PrintWriter average = new PrintWriter("src/main/resources/out/average.txt");
-        PrintWriter sd = new PrintWriter("src/main/resources/out/sd.txt");
+//        PrintWriter average = new PrintWriter("src/main/resources/out/average.txt");
+//        PrintWriter sd = new PrintWriter("src/main/resources/out/sd.txt");
         out.println("iteration, x");
         out2.println("iteration, x");
 
@@ -86,14 +86,14 @@ public class Solver {
             }
             out.println(numberOfIterations + ", " + bestCurrentSolution.getFitness());
             out2.println(numberOfIterations + ", " + bestSolution.getFitness());
-            average.println(population.getEntities().stream().mapToDouble(Entity::getFitness).sum()/population.getEntities().size());
-            sd.println(calculateSD(population.getEntities().stream().mapToDouble(Entity::getFitness).toArray()));
+//            average.println(population.getEntities().stream().mapToDouble(Entity::getFitness).sum()/population.getEntities().size());
+//            sd.println(calculateSD(population.getEntities().stream().mapToDouble(Entity::getFitness).toArray()));
         }
         stopWatch.stop();
         out.close();
         out2.close();
-        average.close();
-        sd.close();
+//        average.close();
+//        sd.close();
 
         return Solution.builder()
                 .bestEntity(bestSolution)

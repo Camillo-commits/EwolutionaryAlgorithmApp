@@ -4,8 +4,6 @@ import com.ewolutionary.alg.function.Functions;
 import com.ewolutionary.alg.impl.crossers.Crosser;
 import com.ewolutionary.alg.impl.crossers.CrosserOption;
 import com.ewolutionary.alg.impl.crossers.CrosserProvider;
-import com.ewolutionary.alg.impl.inwerters.Inverter;
-import com.ewolutionary.alg.impl.inwerters.InverterImpl;
 import com.ewolutionary.alg.impl.mutators.Mutator;
 import com.ewolutionary.alg.impl.mutators.MutatorOption;
 import com.ewolutionary.alg.impl.mutators.MutatorProvider;
@@ -26,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 public class Solver {
     private final Selector selector;
     private final Mutator mutator;
-    private Inverter inverter;
     private final Crosser crosser;
     private final Configuration configuration;
     private static String function;
@@ -37,9 +34,6 @@ public class Solver {
         this.selector = SelectorProvider.getSelector(selectorOption);
         this.configuration = configuration;
         Solver.function = function;
-        if (configuration.isInverter()) {
-            this.inverter = new InverterImpl();
-        }
     }
 
     public Solution solve() throws IOException {
@@ -65,9 +59,7 @@ public class Solver {
                     configuration.getPercentOfBestToNextCentury(), configuration.getSelectorConfiguration());
             crosser.cross(selected, configuration.getCrossingProbability(), configuration.getSizeOfPopulation());
             mutator.mutate(selected, configuration.getMutationProbability());
-            if (inverter != null) {
-                inverter.invert(selected, configuration.getInversionProbability());
-            }
+
             Entity bestCurrentSolution;
             if(Functions.MINIMUM) {
                 bestCurrentSolution = EntityUtils.findMinBestSolution(selected);

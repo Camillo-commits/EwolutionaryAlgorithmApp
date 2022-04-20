@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public class Entity {
 
-    private int size;
+    private final int size;
     private List<Chromosome> chromosomes;
     private List<Double> entityValue;
     private final int start;
@@ -21,24 +21,12 @@ public class Entity {
         this.start = start;
         this.stop = stop;
         this.size = calculateSize(precision);
-        this.chromosomes = generateChromosomes(size, xVariablesCount);
+        this.chromosomes = generateChromosomes(start, stop, xVariablesCount);
         this.entityValue = calculateValue();
     }
 
-    public Entity(int start, int stop, List<byte[]> chromosomeData) {
-        this.start = start;
-        this.stop = stop;
-        this.size = chromosomeData.get(0).length;
-        this.chromosomes = chromosomeData.stream().map(Chromosome::new).collect(Collectors.toList());
-        this.entityValue = calculateValue();
-    }
-
-    private List<Chromosome> generateChromosomes(int size, int count) {
-        return IntStream.range(0, count).mapToObj(i -> new Chromosome(size)).collect(Collectors.toList());
-    }
-
-    public int getSize() {
-        return size;
+    private List<Chromosome> generateChromosomes(int start, int stop, int count) {
+        return IntStream.range(0, count).mapToObj(i -> new Chromosome(start, stop)).collect(Collectors.toList());
     }
 
     public List<Double> getValue() {
@@ -49,21 +37,25 @@ public class Entity {
         return chromosomes;
     }
 
-    public List<byte[]> getChromosomesBytes() {
-        return chromosomes.stream().map(c -> c.getBinary()).collect(Collectors.toList());
+    public List<Double> getChromosomesValues() {
+        return chromosomes.stream().map(Chromosome::getValue).collect(Collectors.toList());
     }
 
     private void setFitness(Double fitness) {
         this.fitness = fitness;
     }
 
-    public void setChromosomesBytes(List<byte[]> binaries) {
-        if (binaries.size() == chromosomes.size()) {
-            for (int i = 0; i < binaries.size(); i++) {
-                chromosomes.get(i).setBinary(binaries.get(i));
+    public void setChromosomesValues(List<Double> values) {
+        if (values.size() == chromosomes.size()) {
+            for (int i = 0; i < values.size(); i++) {
+                chromosomes.get(i).setValue(values.get(i));
             }
         }
         this.entityValue = calculateValue();
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public Double getFitness() {
@@ -73,7 +65,7 @@ public class Entity {
 
     private List<Double> calculateValue() {
         // x = a + decimal(chromosome) * (b-a) / (2^m - 1)
-        return chromosomes.stream().map(c -> start + c.getDecimalValue() * (stop - start) / (Math.pow(2, size) - 1)).collect(Collectors.toList());
+        return chromosomes.stream().map(c -> start + c.getValue() * (stop - start) / (Math.pow(2, size) - 1)).collect(Collectors.toList());
     }
 
     private int calculateSize(int precision) {

@@ -29,12 +29,8 @@ import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @PageTitle("")
@@ -248,7 +244,7 @@ public class View extends HorizontalLayout {
                     resultLayout.add(chart);
                 } else if (configuration.getXVariableCount() == 1) {
                     //TODO NOT WORKING 4 ONE VARIABLE
-                    solution.getBestEntityInEachIteration().forEach(entity -> entity.getValue().add(entity.getFitness()));
+                    solution.getBestEntityInEachIteration().forEach(entity -> entity.getValues().add(entity.getFitness()));
                     Chart chart = genChartTwoVariables();
                     //Chart chart = genChartOneVariable();
                     resultLayout.add(chart);
@@ -312,7 +308,7 @@ public class View extends HorizontalLayout {
 
         int iter = 0;
         for (Entity e : solution.getBestEntityInEachIteration()) {
-            DataSeriesItem point = new DataSeriesItem(e.getValue().get(0), e.getValue().get(1));
+            DataSeriesItem point = new DataSeriesItem(e.getValues().get(0), e.getValues().get(1));
 
             point.setName("Iteration " + iter + " Value: " + e.getFitness());
 
@@ -353,7 +349,7 @@ public class View extends HorizontalLayout {
 
         int iter = 0;
         for (Entity e : solution.getBestEntityInEachIteration()) {
-            DataSeriesItem point = new DataSeriesItem(e.getValue().get(0), e.getFitness());
+            DataSeriesItem point = new DataSeriesItem(e.getValues().get(0), e.getFitness());
 
             point.setName("Iteration " + iter + " Value: " + e.getFitness());
 

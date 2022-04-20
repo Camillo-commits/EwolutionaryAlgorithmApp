@@ -9,9 +9,13 @@ import java.util.stream.Stream;
 public class Chromosome {
 
     private double value;
+    private final int start;
+    private final int stop;
 
     public Chromosome(int start, int stop) {
-        this.value = start + (stop-start) * new Random().nextDouble();
+        this.start = start;
+        this.stop = stop;
+        this.value = getNextValue();
     }
 
     public double getValue() {
@@ -20,5 +24,13 @@ public class Chromosome {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    public double getNextValue() {
+        return start + (stop-start) * new Random().nextDouble();
+    }
+
+    public void setNextValue() {
+        this.value = getNextValue();
     }
 }

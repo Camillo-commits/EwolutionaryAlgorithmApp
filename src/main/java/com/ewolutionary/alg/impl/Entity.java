@@ -9,11 +9,11 @@ import java.util.stream.IntStream;
 
 public class Entity {
 
-    private final int size;
+    private int size;
     private List<Chromosome> chromosomes;
     private List<Double> entityValue;
-    private final int start;
-    private final int stop;
+    private int start;
+    private int stop;
     private boolean isElite;
     private Double fitness;
 
@@ -25,11 +25,13 @@ public class Entity {
         this.entityValue = calculateValue();
     }
 
+    public Entity() {}
+
     private List<Chromosome> generateChromosomes(int start, int stop, int count) {
         return IntStream.range(0, count).mapToObj(i -> new Chromosome(start, stop)).collect(Collectors.toList());
     }
 
-    public List<Double> getValue() {
+    public List<Double> getValues() {
         return entityValue;
     }
 
@@ -106,7 +108,7 @@ public class Entity {
 
     @Override
     public String toString() {
-        return "Entity " + chromosomes.toString() + "value: " + getValue();
+        return "Entity " + chromosomes.toString() + "value: " + getValues();
     }
 
 }

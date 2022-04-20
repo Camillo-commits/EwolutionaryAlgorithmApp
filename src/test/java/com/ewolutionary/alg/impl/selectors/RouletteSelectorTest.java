@@ -5,7 +5,6 @@ import com.ewolutionary.alg.impl.Population;
 import com.ewolutionary.alg.impl.Solver;
 import com.ewolutionary.alg.impl.selectors.configuration.RouletteSelectorConfiguration;
 import org.bouncycastle.util.Arrays;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public class RouletteSelectorTest {
 
 //        System.out.println(selected);
         assertEquals(selected.size(), 20);
-        Optional<Entity> en = selected.stream().filter(e -> e.getValue().get(0) != 3.937007874015748).findAny();
+        Optional<Entity> en = selected.stream().filter(e -> e.getValues().get(0) != 3.937007874015748).findAny();
 //        assertFalse(en.isPresent());
     }
 
@@ -73,7 +72,7 @@ public class RouletteSelectorTest {
         }
 
         assertEquals(selected.size(), 20);
-        Optional<Entity> en = selected.stream().filter(e -> e.getValue().get(0) == 3.937007874015748).findAny();
+        Optional<Entity> en = selected.stream().filter(e -> e.getValues().get(0) == 3.937007874015748).findAny();
 //        assertTrue(en.isPresent());
     }
 

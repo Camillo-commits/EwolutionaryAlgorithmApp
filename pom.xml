@@ -144,21 +144,8 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>RELEASE</version>
+            <version>7.5</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.bgsoftware.superiorskyblock</groupId>
-            <artifactId>ewolutionaryalg</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/externalLib/SuperiorSkyblock2-1.9.0-b567.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.bgsoftware.superiorskyblock.api.scripts</groupId>

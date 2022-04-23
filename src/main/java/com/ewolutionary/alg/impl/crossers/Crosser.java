@@ -46,4 +46,8 @@ public abstract class Crosser {
         individuals.addAll(result);
         individuals.addAll(unmodifiedResult);
     }
+
+    protected double genRandomBetween(double rangeMin, double rangeMax) {
+        return rangeMin + (rangeMax - rangeMin) * rnd.nextDouble();
+    }
 }

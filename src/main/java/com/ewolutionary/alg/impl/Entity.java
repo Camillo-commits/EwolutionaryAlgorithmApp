@@ -26,7 +26,8 @@ public class Entity {
         this.entityValue = calculateValue();
     }
 
-    public Entity() {}
+    public Entity() {
+    }
 
     private List<Chromosome> generateChromosomes(int start, int stop, int count) {
         return IntStream.range(0, count).mapToObj(i -> new Chromosome(start, stop)).collect(Collectors.toList());
@@ -100,6 +101,10 @@ public class Entity {
 
     public void setElite(boolean elite) {
         isElite = elite;
+    }
+
+    public int getXVariableCount() {
+        return xVariableCount;
     }
 
     @VisibleForTesting

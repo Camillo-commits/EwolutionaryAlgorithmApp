@@ -108,7 +108,7 @@ public class Entity {
 
     @Override
     public String toString() {
-        return "Entity " + chromosomes.toString() + "value: " + getValues();
+        return "Entity " + chromosomes.toString();
     }
 
 }

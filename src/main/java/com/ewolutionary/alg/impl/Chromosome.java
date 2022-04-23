@@ -33,4 +33,9 @@ public class Chromosome {
     public void setNextValue() {
         this.value = getNextValue();
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }

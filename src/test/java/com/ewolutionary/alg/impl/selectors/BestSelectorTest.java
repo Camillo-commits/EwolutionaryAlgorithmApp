@@ -26,7 +26,7 @@ public class BestSelectorTest {
         Solver.overrideFunctionToSolve("x0");
 
         for (double i = 0; i < 100; ++i) {
-            Entity entity = new Entity(0, 1, 0, 1);
+            Entity entity = new Entity(0, 1, 1);
             Class[] classes = {Double.class};
             Object[] objects = {i};
             PrivateAccessor.invoke(entity, "setFitness", classes, objects);

@@ -27,7 +27,7 @@ public class Population {
 
     private void generateEntities(int start, int stop, int precision) {
         for(int i=0; i<size; i++) {
-            entities.add(new Entity(start, stop, precision, xVariablesCount));
+            entities.add(new Entity(start, stop, xVariablesCount));
         }
     }
 

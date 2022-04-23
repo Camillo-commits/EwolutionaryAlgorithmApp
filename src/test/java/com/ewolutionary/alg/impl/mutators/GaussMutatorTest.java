@@ -15,15 +15,15 @@ public class GaussMutatorTest {
     public void shouldMutateEntities() {
 
         List<Entity> entities = new ArrayList<>();
-        Entity e1 = new Entity(0,5,2,2);
+        Entity e1 = new Entity(0,5,2);
         entities.add(e1);
         double ch1Value = e1.getChromosomesValues().get(0);
         double ch2Value = e1.getChromosomesValues().get(1);
-        entities.add(new Entity(0, 5, 2, 2));
-        entities.add(new Entity(0, 5, 2, 2));
-        entities.add(new Entity(0, 5, 2, 2));
-        entities.add(new Entity(0, 5, 2, 2));
-        entities.add(new Entity(0, 5, 2, 2));
+        entities.add(new Entity(0, 5, 2));
+        entities.add(new Entity(0, 5,  2));
+        entities.add(new Entity(0, 5, 2));
+        entities.add(new Entity(0, 5, 2));
+        entities.add(new Entity(0, 5, 2));
 
         GaussMutator gm = new GaussMutator();
         gm.mutate(entities, 0.2);

@@ -16,11 +16,12 @@ public class Entity {
     private int stop;
     private boolean isElite;
     private Double fitness;
+    private int xVariableCount;
 
-    public Entity(int start, int stop, int precision, int xVariablesCount) {
+    public Entity(int start, int stop, int xVariablesCount) {
         this.start = start;
         this.stop = stop;
-        this.size = calculateSize(precision);
+        this.xVariableCount = xVariablesCount;
         this.chromosomes = generateChromosomes(start, stop, xVariablesCount);
         this.entityValue = calculateValue();
     }
@@ -57,7 +58,7 @@ public class Entity {
     }
 
     public int getSize() {
-        return size;
+        return xVariableCount;
     }
 
     public Double getFitness() {

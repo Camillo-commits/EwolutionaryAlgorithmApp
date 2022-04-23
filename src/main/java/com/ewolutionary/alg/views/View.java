@@ -244,7 +244,7 @@ public class View extends HorizontalLayout {
                     resultLayout.add(chart);
                 } else if (configuration.getXVariableCount() == 1) {
                     //TODO NOT WORKING 4 ONE VARIABLE
-                    solution.getBestEntityInEachIteration().forEach(entity -> entity.getValues().add(entity.getFitness()));
+                    solution.getBestEntityInEachIteration().forEach(entity -> entity.getChromosomesValues().add(entity.getFitness()));
                     Chart chart = genChartTwoVariables();
                     //Chart chart = genChartOneVariable();
                     resultLayout.add(chart);
@@ -308,7 +308,7 @@ public class View extends HorizontalLayout {
 
         int iter = 0;
         for (Entity e : solution.getBestEntityInEachIteration()) {
-            DataSeriesItem point = new DataSeriesItem(e.getValues().get(0), e.getValues().get(1));
+            DataSeriesItem point = new DataSeriesItem(e.getChromosomesValues().get(0), e.getChromosomesValues().get(1));
 
             point.setName("Iteration " + iter + " Value: " + e.getFitness());
 
@@ -349,7 +349,7 @@ public class View extends HorizontalLayout {
 
         int iter = 0;
         for (Entity e : solution.getBestEntityInEachIteration()) {
-            DataSeriesItem point = new DataSeriesItem(e.getValues().get(0), e.getFitness());
+            DataSeriesItem point = new DataSeriesItem(e.getChromosomesValues().get(0), e.getFitness());
 
             point.setName("Iteration " + iter + " Value: " + e.getFitness());
 

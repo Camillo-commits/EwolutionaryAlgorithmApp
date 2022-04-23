@@ -15,7 +15,7 @@ public class ArithmeticCrosser extends Crosser {
         List<Double> firstValues = new ArrayList<>();
         List<Double> secondValues = new ArrayList<>();
 
-        for (int i = 0; i < first.getValues().size(); i++) {
+        for(int i = 0; i < first.getChromosomesValues().size(); i++) {
             firstValues.add(k * first.getChromosomesValues().get(i) + (1 - k) * second.getChromosomesValues().get(i));
             secondValues.add(k * second.getChromosomesValues().get(i) + (1 - k) * first.getChromosomesValues().get(i));
         }

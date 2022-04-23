@@ -33,10 +33,6 @@ public class Entity {
         return IntStream.range(0, count).mapToObj(i -> new Chromosome(start, stop)).collect(Collectors.toList());
     }
 
-    public List<Double> getValues() {
-        return entityValue;
-    }
-
     public List<Chromosome> getChromosomes() {
         return chromosomes;
     }
@@ -80,7 +76,7 @@ public class Entity {
     }
 
     public double calculateFitness() {
-        return Functions.function(Solver.functionToSolve(), entityValue);
+        return Functions.function(Solver.functionToSolve(), getChromosomesValues());
     }
 
     private double log2(double n) {

@@ -49,7 +49,7 @@ public class RouletteSelectorTest {
 
 //        System.out.println(selected);
         assertEquals(selected.size(), 20);
-        Optional<Entity> en = selected.stream().filter(e -> e.getValues().get(0) != 3.937007874015748).findAny();
+        Optional<Entity> en = selected.stream().filter(e -> e.getChromosomesValues().get(0) != 3.937007874015748).findAny();
 //        assertFalse(en.isPresent());
     }
 
@@ -72,7 +72,7 @@ public class RouletteSelectorTest {
         }
 
         assertEquals(selected.size(), 20);
-        Optional<Entity> en = selected.stream().filter(e -> e.getValues().get(0) == 3.937007874015748).findAny();
+        Optional<Entity> en = selected.stream().filter(e -> e.getChromosomesValues().get(0) == 3.937007874015748).findAny();
 //        assertTrue(en.isPresent());
     }
 

@@ -1,6 +1,7 @@
 package com.ewolutionary.alg.impl.crossers;
 
 import com.ewolutionary.alg.impl.Entity;
+import com.helger.commons.annotation.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,5 +50,10 @@ public abstract class Crosser {
 
     protected double genRandomBetween(double rangeMin, double rangeMax) {
         return rangeMin + (rangeMax - rangeMin) * rnd.nextDouble();
+    }
+
+    @VisibleForTesting
+    private void setRnd(Random rnd) {
+        this.rnd = rnd;
     }
 }

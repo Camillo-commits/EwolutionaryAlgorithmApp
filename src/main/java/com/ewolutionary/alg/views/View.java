@@ -41,7 +41,6 @@ public class View extends HorizontalLayout {
     private final ComboBox<MutatorOption> mutators = new ComboBox<>("Mutator", MutatorOption.values());
     private final ComboBox<SelectorOption> selectors = new ComboBox<>("Selector", SelectorOption.values());
     private final ComboBox<String> functionMinMax = new ComboBox<>("Function value", "MIN", "MAX");
-    private final Checkbox isInverter = new Checkbox("Inverter");
     private final Checkbox isEliteStrategy = new Checkbox("Elite strategy");
     private final ComboBox<String> buildInFunction = new ComboBox<>("Build in function");
     private final Map<String, Integer> internalFunctions = Map.of("x0^2+x1", 2, "2x0^2+5", 1, "BealFunction", 2, "BraninFunction", 2, "EasomFunction", 2);
@@ -57,7 +56,6 @@ public class View extends HorizontalLayout {
     private final IntegerField maxIterations = new IntegerField("Maximum iterations");
     private final NumberField crossingProbability = new NumberField("Crossing probability");
     private final NumberField mutationProbability = new NumberField("Mutation probability");
-    private final NumberField inversionProbability = new NumberField("Inversion probability");
     private final IntegerField numOfVariables = new IntegerField("Number of variables");
 
     private Solver solver;
@@ -71,7 +69,7 @@ public class View extends HorizontalLayout {
         comboBoxesLayout.setPadding(true);
         comboBoxesLayout.setVerticalComponentAlignment(Alignment.CENTER);
 
-        HorizontalLayout buttons = new HorizontalLayout(isEliteStrategy, isInverter);
+        HorizontalLayout buttons = new HorizontalLayout(isEliteStrategy);
         buttons.setPadding(true);
 
         selectors.addValueChangeListener(event -> {
@@ -161,7 +159,7 @@ public class View extends HorizontalLayout {
         VerticalLayout configurationLayout = new VerticalLayout(
                 new HorizontalLayout(start, stop, sizeOfPopulation),
                 new HorizontalLayout(precision, maxIterations, percentOfBestToNextCentury),
-                new HorizontalLayout(crossingProbability, mutationProbability, inversionProbability));
+                new HorizontalLayout(crossingProbability, mutationProbability));
         configurationLayout.setPadding(true);
         configurationLayout.addClassName(".gap-m");
         configurationLayout.setSpacing(true);
@@ -174,7 +172,6 @@ public class View extends HorizontalLayout {
         maxIterations.setWidthFull();
         crossingProbability.setWidthFull();
         mutationProbability.setWidthFull();
-        inversionProbability.setWidthFull();
 
         mutationProbability.setMin(0);
         mutationProbability.setMax(1);
@@ -184,20 +181,11 @@ public class View extends HorizontalLayout {
         crossingProbability.setMax(1);
         crossingProbability.setPlaceholder("0.XXX");
 
-        inversionProbability.setMin(0);
-        inversionProbability.setMax(1);
-        inversionProbability.setPlaceholder("0.XXX");
-
         Details configurationDetails = new Details("Additional configuration", configurationLayout);
 
         percentOfBestToNextCentury.setEnabled(false);
         isEliteStrategy.addClickListener(click -> {
             percentOfBestToNextCentury.setEnabled(isEliteStrategy.getValue());
-        });
-
-        inversionProbability.setEnabled(false);
-        isInverter.addClickListener(click -> {
-            inversionProbability.setEnabled(isInverter.getValue());
         });
 
         solveButton.addClickListener(event -> {
@@ -207,7 +195,6 @@ public class View extends HorizontalLayout {
                 int numberOfX = isCustom.getValue()?numOfVariables.getValue():internalFunctions.get(buildInFunction.getValue());
 
                 Configuration.ConfigurationBuilder builder = Configuration.builder()
-                        .isInverter(isInverter.getValue())
                         .sizeOfPopulation(sizeOfPopulation.getValue())
                         .precision(precision.getValue())
                         .start(start.getValue())
@@ -220,9 +207,6 @@ public class View extends HorizontalLayout {
                         .xVariableCount(numberOfX);
                 if (!percentOfBestToNextCentury.isEmpty()) {
                     builder.percentOfBestToNextCentury(percentOfBestToNextCentury.getValue());
-                }
-                if (!inversionProbability.isEmpty()) {
-                    builder.inversionProbability(inversionProbability.getValue());
                 }
                 configuration = builder.build();
                 solver = new Solver(mutators.getValue(), crossers.getValue(), selectors.getValue(),
@@ -245,8 +229,8 @@ public class View extends HorizontalLayout {
                 } else if (configuration.getXVariableCount() == 1) {
                     //TODO NOT WORKING 4 ONE VARIABLE
                     solution.getBestEntityInEachIteration().forEach(entity -> entity.getChromosomesValues().add(entity.getFitness()));
-                    Chart chart = genChartTwoVariables();
-                    //Chart chart = genChartOneVariable();
+                    //Chart chart = genChartTwoVariables();
+                    Chart chart = genChartOneVariable();
                     resultLayout.add(chart);
                 }
 

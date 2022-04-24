@@ -20,9 +20,12 @@ public class ArithmeticCrosser extends Crosser {
             secondValues.add(k * second.getChromosomesValues().get(i) + (1 - k) * first.getChromosomesValues().get(i));
         }
 
-        first.setChromosomesValues(firstValues);
-        second.setChromosomesValues(secondValues);
+        Entity newFirst = new Entity(first.getStart(), first.getStop(), first.getXVariableCount());
+        Entity newSecond = new Entity(first.getStart(), first.getStop(), first.getXVariableCount());
 
-        return asList(first, second);
+        newFirst.setChromosomesValues(firstValues);
+        newSecond.setChromosomesValues(secondValues);
+
+        return asList(newFirst, newSecond);
     }
 }

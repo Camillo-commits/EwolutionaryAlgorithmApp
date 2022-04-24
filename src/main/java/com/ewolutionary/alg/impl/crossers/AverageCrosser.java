@@ -16,8 +16,10 @@ public class AverageCrosser extends Crosser {
             newValues.add((first.getChromosomesValues().get(i) + second.getChromosomesValues().get(i))/2);
         }
 
-        first.setChromosomesValues(newValues);
+        Entity newFirst = new Entity(first.getStart(), first.getStop(), first.getXVariableCount());
 
-        return Collections.singletonList(first);
+        newFirst.setChromosomesValues(newValues);
+
+        return Collections.singletonList(newFirst);
     }
 }

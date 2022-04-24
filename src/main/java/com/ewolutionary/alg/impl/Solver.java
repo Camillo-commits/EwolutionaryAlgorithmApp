@@ -40,7 +40,7 @@ public class Solver {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         List<Entity> bestSolutions = new ArrayList<>();
-        Population population = new Population(configuration.getSizeOfPopulation(), configuration.getPrecision(),
+        Population population = new Population(configuration.getSizeOfPopulation(),
                 configuration.getStart(), configuration.getStop(), configuration.getXVariableCount());
         boolean precisionMet = false;
         int numberOfIterations = 0;

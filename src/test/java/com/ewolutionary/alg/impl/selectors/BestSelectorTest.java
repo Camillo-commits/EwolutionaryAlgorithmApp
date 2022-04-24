@@ -33,17 +33,17 @@ public class BestSelectorTest {
             PrivateAccessor.invoke(entity, "setFitness", classes, objects);
             classes = new Class[]{List.class};
             objects = new Object[]{List.of(i)};
-            PrivateAccessor.invoke(entity, "setEntityValue", classes, objects);
+            PrivateAccessor.invoke(entity, "setChromosomesValues", classes, objects);
             entityList.add(entity);
         }
 
         Solver.overrideFunctionToSolve("2x0^2+5");
 
-        Population population = new Population(100,0,0,1,1);
+        Population population = new Population(100,0,0,1);
         population.setEntities(entityList);
 
         Selector selector = SelectorProvider.getSelector(SelectorOption.BEST);
-        List<Entity> result = selector.select(population, false, 0, new BestSelectorConfiguration(1));
-//        result.forEach(entity -> Assert.assertTrue(entity.getFitness() >= 50) ); //TODO poprawic
+        List<Entity> result = selector.select(population, false, 0, new BestSelectorConfiguration(0.04));
+        result.forEach(entity -> Assert.assertTrue(entity.getFitness() >= 18437) ); //TODO poprawic
     }
 }

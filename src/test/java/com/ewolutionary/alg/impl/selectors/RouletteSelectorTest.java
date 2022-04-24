@@ -77,12 +77,12 @@ public class RouletteSelectorTest {
     }
 
     private Population getMinPopulation() {
-        Population p = new Population(10, 2, 0, 1, 2);
+        Population p = new Population(10, 2, 0, 2);
         return p;
     }
 
     private Population getPopulation() {
-        Population p = new Population(100, 2, 0, 1, 1);
+        Population p = new Population(100, 2, 0, 1);
         int chromosomeBinary = 1;
 
         return p;

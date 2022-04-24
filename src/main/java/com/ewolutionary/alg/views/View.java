@@ -49,7 +49,6 @@ public class View extends HorizontalLayout {
     private final Button solveButton = new Button("Solve");
     //4 config
     private final IntegerField sizeOfPopulation = new IntegerField("Size of population");
-    private final IntegerField precision = new IntegerField("Precision");
     private final IntegerField start = new IntegerField("Start");
     private final IntegerField stop = new IntegerField("Stop");
     private final IntegerField percentOfBestToNextCentury = new IntegerField("% of best to pass");
@@ -158,14 +157,13 @@ public class View extends HorizontalLayout {
 
         VerticalLayout configurationLayout = new VerticalLayout(
                 new HorizontalLayout(start, stop, sizeOfPopulation),
-                new HorizontalLayout(precision, maxIterations, percentOfBestToNextCentury),
+                new HorizontalLayout(maxIterations, percentOfBestToNextCentury),
                 new HorizontalLayout(crossingProbability, mutationProbability));
         configurationLayout.setPadding(true);
         configurationLayout.addClassName(".gap-m");
         configurationLayout.setSpacing(true);
         percentOfBestToNextCentury.setWidthFull();
         sizeOfPopulation.setWidthFull();
-        precision.setWidthFull();
         start.setWidthFull();
         stop.setWidthFull();
         percentOfBestToNextCentury.setWidthFull();
@@ -196,7 +194,6 @@ public class View extends HorizontalLayout {
 
                 Configuration.ConfigurationBuilder builder = Configuration.builder()
                         .sizeOfPopulation(sizeOfPopulation.getValue())
-                        .precision(precision.getValue())
                         .start(start.getValue())
                         .stop(stop.getValue())
                         .maxIterations(maxIterations.getValue())
@@ -262,7 +259,7 @@ public class View extends HorizontalLayout {
         boolean isFunctionEmpty = (isCustom.getValue() && customFunction.isEmpty()) || (!isCustom.getValue() && buildInFunction.isEmpty());
         return crossers.isEmpty() || mutators.isEmpty() || selectors.isEmpty()
                 || start.isEmpty() || stop.isEmpty() || (numOfVariables.isEmpty() && isCustom.getValue())
-                || sizeOfPopulation.isEmpty() || precision.isEmpty() || maxIterations.isEmpty()
+                || sizeOfPopulation.isEmpty() || maxIterations.isEmpty()
                 || crossingProbability.isEmpty() || mutationProbability.isEmpty() || functionMinMax.isEmpty() || isFunctionEmpty;
     }
 

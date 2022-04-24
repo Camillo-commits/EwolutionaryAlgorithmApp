@@ -10,7 +10,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Configuration {
     private int sizeOfPopulation;
-    private int precision;
     private int start;
     private int stop;
     private int percentOfBestToNextCentury;

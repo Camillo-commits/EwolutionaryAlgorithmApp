@@ -10,10 +10,10 @@ public class Population {
     private final int xVariablesCount;
     private List<Entity> entities = new ArrayList<>();
 
-    public Population(int size, int precision, int start, int stop, int xVariablesCount) {
+    public Population(int size, int start, int stop, int xVariablesCount) {
         this.size = size;
         this.xVariablesCount = xVariablesCount;
-        generateEntities(start, stop, precision);
+        generateEntities(start, stop);
     }
 
     public List<Entity> getEntities() {
@@ -25,7 +25,7 @@ public class Population {
             this.entities = entities;
     }
 
-    private void generateEntities(int start, int stop, int precision) {
+    private void generateEntities(int start, int stop) {
         for(int i=0; i<size; i++) {
             entities.add(new Entity(start, stop, xVariablesCount));
         }
